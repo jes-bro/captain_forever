@@ -2,14 +2,15 @@
 Ship module creation abstract class and sub-classes
 """
 from abc import ABC, abstractmethod
+import pygame
 
 
-class Module(ABC):
+class Module(pygame.sprite.Sprite):
     """
     abstract class to define the controller methods used in control subclasses
     """
 
-    def __init__(self, parent, color):
+    def __init__(self, module_type, color, parent=None):
         """
         initalize instance of a module
 
@@ -24,6 +25,7 @@ class Module(ABC):
             "Blue": 125,
             "Purple": 200,
         }
+        self._type = module_type
         self._parent = parent
         self._children = None
         self._hp = colors_hp[color]
@@ -95,6 +97,7 @@ class PygameModule(Module):
     """
     Class for modules that depend on pygame
     """
+    def __init__():
 
     def move(self):
         """
