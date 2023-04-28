@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
-from utils import load_sprite
+from utils import get_random_velocity, load_sprite, wrap_position
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
 UP = Vector2(0, -1)
@@ -18,8 +18,8 @@ class GameObject:
         blit_position = self.position - Vector2(self.radius)
         surface.blit(self.sprite, blit_position)
 
-    def move(self):
-        self.position = self.position + self.velocity
+    def move(self, surface):
+        self.position = wrap_position(self.position + self.velocity, surface)
 
     def collides_with(self, other_obj):
         distance = self.position.distance_to(other_obj.position)
@@ -75,3 +75,8 @@ class Ship(GameObject):
         rotated_surface_size = Vector2(rotated_surface.get_size())
         blit_position = self.position - rotated_surface_size * .5
         surface.blit(rotated_surface, blit_position)
+
+
+class Asteroid(GameObject):
+    def __init__(self, position):
+        super().__init__(position, load_sprite("ship"), get_random_velocity(1, 3))
