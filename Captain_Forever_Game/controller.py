@@ -2,7 +2,7 @@ import pygame
 import math
 
 
-class Controller:
+class Controller(Ship):
     def __init__(self, ship, x, y, speed):
         self.x = x
         self.y = y
@@ -47,3 +47,12 @@ class Controller:
     def update(self):
         for event in pygame.event.get():
             self.move(event)
+
+    def handle_event(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                self.ship.accelerate()
+            elif event.key == pygame.K_a:
+                self.ship.rotate(clockwise=False)
+            elif event.key == pygame.K_d:
+                self.ship.rotate(clockwise=True)
