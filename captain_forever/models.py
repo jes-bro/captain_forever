@@ -1,5 +1,10 @@
 import pygame
 from pygame.math import Vector2
+from pygame.transform import rotozoom
+from utils import load_sprite
+
+# Because pygame has inverted y axis, this vector points UP (used for calculations)
+UP = Vector2(0, -1)
 
 
 class GameObject:
@@ -19,3 +24,29 @@ class GameObject:
     def collides_with(self, other_obj):
         distance = self.position.distance_to(other_obj.position)
         return distance < self.radius + other_obj.radius
+
+
+class Ship(GameObject):
+    MANEUVERABILITY = 3
+
+    def __init__(self, position):
+        """
+        initializes Ship (NPC and player)
+        """
+        self.direction = Vector2(UP)
+        super().__init__(position, load_sprite("player_ship"), Vector2(0))
+
+    def rotate(self, clockwise=True):
+        """
+        rotate the direction vector of the ship by MANEUVERABILITY degrees
+        """
+        sign = 1 if clockwise else -1
+        angle = self.MANEUVERABILITY * sign
+        self.direction.rotate_ip(angle)
+
+    def draw(self, surface):
+        angle_to_transform = self.direction.angle_to(UP)
+        rotated_surface = rotozoom(self.sprite, angle_to_transform, 1.0)
+        rotated_surface_size = Vector2(rotated_surface.get_size())
+        blit_position = self.position - rotated_surface_size * .5
+        surface.blit(rotated_surface, blit_position)
