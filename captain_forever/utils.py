@@ -5,9 +5,7 @@ import os
 
 def load_sprite(name, horizontal_dim, vertical_dim, with_alpha=True):
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
-    # should change working directory to top level directory
-    # os.chdir("..")
-    print(os.getcwd())
+    # should change  directory to top level directory in the load
     loaded_sprite = load(f"../assets/sprites/{name}.png")
     loaded_sprite = scale(loaded_sprite, (horizontal_dim, vertical_dim))
     if with_alpha:
