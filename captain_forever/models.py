@@ -27,7 +27,23 @@ class GameObject:
 
 
 class Ship(GameObject):
+    """
+    represents player and npc ship instances
+
+    Constants: 
+        MANEUVERABILITY: int, degrees per second a ship can turn
+        ACCELERATION: float, rate of cartesian transform velocity change
+
+    Args: 
+        position: tuple of ints, position on surface to draw the ship
+
+    Methods: 
+        rotate: rotates the ship by MANEUVERABILITY degrees
+        draws the ship on a surface with an applied rotation
+
+    """
     MANEUVERABILITY = 3
+    ACCELERATION = .25
 
     def __init__(self, position):
         """
@@ -44,7 +60,16 @@ class Ship(GameObject):
         angle = self.MANEUVERABILITY * sign
         self.direction.rotate_ip(angle)
 
+    def accelerate(self):
+        """
+        increases velocity of the ship in the direction it is facing
+        """
+        self.velocity += self.direction * self.ACCELERATION
+
     def draw(self, surface):
+        """
+        draws the ship on a surface with an applied rotation
+        """
         angle_to_transform = self.direction.angle_to(UP)
         rotated_surface = rotozoom(self.sprite, angle_to_transform, 1.0)
         rotated_surface_size = Vector2(rotated_surface.get_size())
