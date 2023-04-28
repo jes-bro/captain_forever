@@ -6,9 +6,8 @@ Conquer the infinite expanse of space and become the ultimate Captain Forever!
 
 Captain Forever is a thrilling spaceship adventure game where you, the captain, is an interstellar pilot tasked with the mission of defeating tough enemy ships. Your goal is to survive as long as possible while destroying the ships of enemies.  you'll forge a legacy that transcends time and space – embodying the essence of the ultimate Captain Forever!
 
-## Unique Features
-
-lasers, npc ships, endless discovery
+## Ste by step tutorials with pictures(?)
+showcase how the game should be played by showing what different features look like and what they can do.
 
 ## GitHub Page:
 
