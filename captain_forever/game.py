@@ -1,5 +1,5 @@
 import pygame
-from utils import load_sprite, get_random_position
+from utils import load_sprite, load_sound, get_random_position, print_text
 from models import GameObject, Ship, Asteroid
 
 
@@ -11,6 +11,8 @@ class CaptainForever:
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite("space_background", 800, 600, False)
         self.clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 64)
+        self.message = ""
 
         self.asteroids = []
         self.bullets = []
@@ -84,6 +86,7 @@ class CaptainForever:
             for asteroid in self.asteroids:
                 if asteroid.collides_with(self.player_ship):
                     self.player_ship = None
+                    self.message = "You lost!"
                     break
 
         for bullet in self.bullets[:]:
@@ -96,7 +99,11 @@ class CaptainForever:
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
                     asteroid.split()
+                    load_sound("rock").play()
+
                     break
+        if not self.asteroids and self.spaceship:
+            self.message = "You won!"
 
     def _draw(self):
         """
@@ -105,6 +112,9 @@ class CaptainForever:
         self.screen.blit(self.background, (0, 0))
         for game_object in self._get_game_objects():
             game_object.draw(self.screen)
+
+        if self.message:
+            print_text(self.screen, self.message, self.font)
 
         pygame.display.flip()
         self.clock.tick(60)

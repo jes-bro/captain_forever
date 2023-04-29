@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
-from utils import get_random_velocity, load_sprite, wrap_position
+from utils import get_random_velocity, load_sound, load_sprite, wrap_position
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
 UP = Vector2(0, -1)
@@ -65,6 +65,8 @@ class Ship(GameObject):
         # creates callback for game to access bullets
         self.create_bullet_callback = create_bullet_callback
 
+        self.laser_sound = load_sound("laser")
+
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
         super().__init__(position, load_sprite("ship"), Vector2(0))
@@ -90,6 +92,7 @@ class Ship(GameObject):
         bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.position, bullet_velocity)
         self.create_bullet_callback(bullet)
+        self.laser_sound.play()
 
     def draw(self, surface):
         """
