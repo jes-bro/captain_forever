@@ -39,7 +39,7 @@ class CaptainForever:
             self._handle_input()
             self._process_game_logic()
             self._draw()
-
+    
     def _init_pygame(self):
         pygame.init()
         pygame.display.set_caption("Space Rocks")
@@ -65,6 +65,8 @@ class CaptainForever:
                 self.player_ship.rotate(clockwise=False)
             if is_key_pressed[pygame.K_UP]:
                 self.player_ship.accelerate()
+            elif is_key_pressed[pygame.K_DOWN]:
+                self.player_ship.deccelerate()
 
     def _get_game_objects(self):
         """
@@ -99,10 +101,10 @@ class CaptainForever:
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
                     asteroid.split()
-                    load_sound("rock").play()
+                    # load_sound("rock").play()
 
                     break
-        if not self.asteroids and self.spaceship:
+        if not self.asteroids and self.player_ship:
             self.message = "You won!"
 
     def _draw(self):

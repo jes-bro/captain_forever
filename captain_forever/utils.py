@@ -30,7 +30,7 @@ def load_sound(name):
     loads a sound from sound assets by its name
     """
     path = f"../assets/sounds/{name}.mp3"
-    return Sound(path)
+    # return Sound(path)
 
 
 def wrap_position(position, surface):

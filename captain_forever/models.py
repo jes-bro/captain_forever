@@ -57,15 +57,14 @@ class Ship(GameObject):
     MANEUVERABILITY = 3
     ACCELERATION = .25
     BULLET_SPEED = 3
-
+    #LASER_SOUND = load_sound("laser")
     def __init__(self, position, create_bullet_callback):
         """
         initializes Ship (NPC and player) and bullet callbacks
         """
         # creates callback for game to access bullets
         self.create_bullet_callback = create_bullet_callback
-
-        self.laser_sound = load_sound("laser")
+        self._health = 10
 
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
@@ -83,7 +82,13 @@ class Ship(GameObject):
         """
         increases velocity of the ship in the direction it is facing
         """
-        self.velocity += self.direction * self.ACCELERATION
+        self.velocity += 0.5 * (self.direction * self.ACCELERATION)
+
+    def deccelerate(self):
+        """
+        decreases velocity of the ship in the direction it is facing
+        """
+        self.velocity -= 0.5 * (self.direction * self.ACCELERATION)
 
     def shoot(self):
         """
@@ -92,7 +97,7 @@ class Ship(GameObject):
         bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.position, bullet_velocity)
         self.create_bullet_callback(bullet)
-        self.laser_sound.play()
+        # self.laser_sound.play()
 
     def draw(self, surface):
         """
@@ -103,6 +108,19 @@ class Ship(GameObject):
         rotated_surface_size = Vector2(rotated_surface.get_size())
         blit_position = self.position - rotated_surface_size * .5
         surface.blit(rotated_surface, blit_position)
+
+    def reduce_health(self):
+        """
+        Reduces the ship health attribute by 1
+        """
+        self._health = self._health - 1
+
+class NPCShip(GameObject):
+    """
+    Ship controlled by the computer
+    """
+    def __init__(self):
+        pass
 
 
 class Asteroid(GameObject):
