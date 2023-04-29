@@ -67,7 +67,7 @@ class Ship(GameObject):
 
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
-        super().__init__(position, load_sprite("player_ship"), Vector2(0))
+        super().__init__(position, load_sprite("ship"), Vector2(0))
 
     def rotate(self, clockwise=True):
         """
@@ -105,10 +105,39 @@ class Ship(GameObject):
 class Asteroid(GameObject):
     """
     initializes an asteroid with random velocity from a given sprite
+
+    attributes: 
+        size: int (1 to 3) that represents sprite size family of the asteroid
     """
 
-    def __init__(self, position):
-        super().__init__(position, load_sprite("ship"), get_random_velocity(1, 2))
+    def __init__(self, position, create_asteroid_callback, size=3):
+        """
+        initializes an asteroid and its callback.
+        Size 3 asteroids are fresh, any lower spawned from destruction of asteroid
+        """
+        self.create_asteroid_callback = create_asteroid_callback
+        self.size = size
+
+        size_to_scale = {
+            3: 1,
+            2: 0.5,
+            1: 0.25,
+        }
+        scale = size_to_scale[size]
+        sprite = rotozoom(load_sprite("asteroid"), 0, scale)
+
+        super().__init__(position, sprite, get_random_velocity(1, 2))
+
+    def split(self):
+        """
+        splits an asteroid into 2 smaller asteroids
+        """
+        if self.size > 1:
+            for _ in range(2):
+                asteroid = Asteroid(
+                    self.position, self.create_asteroid_callback, self.size - 1
+                )
+                self.create_asteroid_callback(asteroid)
 
 
 class Bullet(GameObject):

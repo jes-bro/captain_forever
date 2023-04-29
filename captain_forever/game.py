@@ -4,7 +4,7 @@ from models import GameObject, Ship, Asteroid
 
 
 class CaptainForever:
-    ENEMY_SPAWN_DISTANCE = 250
+    ENEMY_SPAWN_DISTANCE = 400
 
     def __init__(self):
         self._init_pygame()
@@ -24,7 +24,7 @@ class CaptainForever:
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
-            self.asteroids.append(Asteroid(position))
+            self.asteroids.append(Asteroid(position, self.asteroids.append))
 
         # ALL npc lines commented upon removal of Gameobject and implement of ship
         # self.npc = GameObject((10, 10), load_sprite("ship", 150, 200), (1, 0))
@@ -95,6 +95,7 @@ class CaptainForever:
                 if asteroid.collides_with(bullet):
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
+                    asteroid.split()
                     break
 
     def _draw(self):

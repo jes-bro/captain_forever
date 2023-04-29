@@ -16,7 +16,7 @@ def load_sprite(name, horizontal_dim=150, vertical_dim=200, with_alpha=True):
     """
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
     loaded_sprite = load(f"../assets/sprites/{name}.png")
-    loaded_sprite = scale(loaded_sprite, (horizontal_dim, vertical_dim))
+    # loaded_sprite = scale(loaded_sprite, (horizontal_dim, vertical_dim))
     if with_alpha:
         return loaded_sprite.convert_alpha()
     else:
