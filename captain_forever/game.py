@@ -69,6 +69,11 @@ class CaptainForever:
                 self.player_ship.accelerate(acceleration_factor=0.5)
             elif is_key_pressed[pygame.K_DOWN]:
                 self.player_ship.deccelerate(deceleration_factor=0.5)
+            
+        if self.message: 
+            if is_key_pressed[pygame.K_KP_ENTER] or is_key_pressed[pygame.K_RETURN]:
+                self.__init__()
+
 
     def _get_game_objects(self):
         """
@@ -84,23 +89,20 @@ class CaptainForever:
         """
         processes movement on non-destroyed game objects
         """
-        for game_object in self._get_game_objects():
-            if game_object in self.npc_ships or game_object in self.fires:
-                game_object.move(self.screen, self.player_ship)
-            else:
-                game_object.move(self.screen)
+        if not self.message:
+            for game_object in self._get_game_objects():
+                if game_object in self.npc_ships or game_object in self.fires:
+                    game_object.move(self.screen, self.player_ship)
+                else:
+                    game_object.move(self.screen)
         if self.player_ship:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
                     self.player_ship = NPCShip(
                         self.player_ship.position, "fire")
                     self.player_ship.draw(self.screen)
-                    self.message = "You lost!"
-                    print_text(self.screen, self.message, self.font)
-                    pygame.display.flip()
+                    self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
-                    pygame.time.delay(1000)
-                    quit()
                 break
 
         # Check for bullet not hitting anything
@@ -121,7 +123,13 @@ class CaptainForever:
 
                     break
         if not self.npc_ships and self.player_ship:
-            self.message = "You won!"
+            self._end_game_message("won")
+
+    def _end_game_message(self, won_lost_str):
+        """
+        displays a won/lost string at the end of the game
+        """
+        self.message = f"You {won_lost_str}! \n To exit, press escape \n To start a new game, press enter"
 
     def _draw(self):
         """

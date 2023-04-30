@@ -85,9 +85,26 @@ def get_random_velocity(min_speed, max_speed):
 
 
 def print_text(surface, text, font, color=Color("tomato")):
-    text_surface = font.render(text, True, color)
+    if "\n" in text:
+        lines = text.split("\n")
+        line_surfaces = []
+        # adding initial height so lines have a buffer
+        total_height = 50
+        for line in lines:
+            text_surface = font.render(line, True, color)
+            total_height += text_surface.get_height()
+            line_surfaces.append(text_surface)
+        # centering text on the screen
+        total_height = total_height/2
+        for line_surface in line_surfaces:
+            rect = line_surface.get_rect()
+            rect.center = (Vector2(surface.get_size()) / 2)- Vector2(0, total_height)
+            total_height -= line_surface.get_height()
+            surface.blit(line_surface, rect)
+    else:
+        text_surface = font.render(text, True, color)
 
-    rect = text_surface.get_rect()
-    rect.center = Vector2(surface.get_size()) / 2
+        rect = text_surface.get_rect()
+        rect.center = Vector2(surface.get_size()) / 2
 
-    surface.blit(text_surface, rect)
+        surface.blit(text_surface, rect)
