@@ -9,14 +9,15 @@ class CaptainForever:
     def __init__(self):
         self._init_pygame()
         self.screen = pygame.display.set_mode((800, 600))
-        self.background = load_sprite("space_background", 800, 600, False)
+        self.background = load_sprite("space_background", False, True)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""
 
         self.npc_ships = []
         self.bullets = []
-        self.player_ship = Ship((400, 400), self.bullets.append)
+        self.player_ship = Ship(
+            (400, 400), self.bullets.append, "player", True, False)
 
         for _ in range(2):
             while True:
@@ -26,7 +27,7 @@ class CaptainForever:
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
-            self.npc_ships.append(NPCShip(position, True, True))
+            self.npc_ships.append(NPCShip(position))
 
     def main_loop(self):
         while True:
@@ -104,7 +105,7 @@ class CaptainForever:
                     # load_sound("rock").play()
 
                     break
-        if not self.asteroids and self.player_ship:
+        if not self.npc_ships and self.player_ship:
             self.message = "You won!"
 
     def _draw(self):

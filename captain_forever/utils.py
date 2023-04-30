@@ -10,7 +10,8 @@ from pygame_animatedgif import AnimatedGifSprite
 
 
 # stores horizontal and vertical dimensions of pngs that need to be scaled
-dimensions = {"ship": (150, 200)}
+dimensions = {"ship": (150, 200), "space_background": (
+    1000, 800)}
 
 
 def load_sprite(name, with_alpha=True, with_scaling=False):
@@ -24,7 +25,6 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     """
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
     loaded_sprite = load(f"../assets/sprites/{name}.png")
-    loaded_sprite.rect = loaded_sprite.image.get_rect()
     if name in dimensions and with_scaling == True:
         loaded_sprite = scale(
             loaded_sprite, (dimensions[name][0], dimensions[name][1]))

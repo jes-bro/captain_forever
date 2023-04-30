@@ -48,7 +48,7 @@ class Ship(GameObject):
         ACCELERATION: float, rate of cartesian transform velocity change
 
     Args:
-        position: tuple of ints, position on surface to draw the ship
+        position: tuple of ints, position (x, y) on surface to draw the ship
 
     Methods:
         rotate: rotates the ship by MANEUVERABILITY degrees
@@ -61,7 +61,7 @@ class Ship(GameObject):
     BULLET_SPEED = 3
     LASER_SOUND = load_sound("laser")
 
-    def __init__(self, position, create_bullet_callback):
+    def __init__(self, position, create_bullet_callback, name, with_alpha, with_scaling):
         """
         initializes Ship (NPC and player) and bullet callbacks
         """
@@ -71,7 +71,8 @@ class Ship(GameObject):
 
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
-        super().__init__(position, load_sprite("ship"), Vector2(0))
+        super().__init__(position, load_sprite(
+            f"{name}", with_alpha, with_scaling), Vector2(0))
 
     def rotate(self, clockwise=True):
         """
@@ -126,7 +127,7 @@ class NPCShip(Ship):
 
     def __init__(self, position):
         self._position = position
-        super().__init__(self._position, load_sprite("ship"), Vector2(0))
+        super().__init__(self._position, Vector2(0), "ship", True, True)
 
     def move_towards_player(self, player):
         # Find direction vector (dx, dy) between enemy and player.
@@ -140,6 +141,12 @@ class NPCShip(Ship):
 
     def move_randomly():
         pass
+
+    def get_position(self):
+        """
+        Return the x, y coord of npc on the screen.
+        """
+        return self._position
 
 
 class Asteroid(GameObject):
