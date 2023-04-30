@@ -67,7 +67,7 @@ class Ship(GameObject):
         """
         # creates callback for game to access bullets
         self.create_bullet_callback = create_bullet_callback
-        self._health = 10
+        self._health = 3
 
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
@@ -121,11 +121,18 @@ class Ship(GameObject):
         """
         self._health = self._health - 1
 
+# TODO: get rid of this cause position is not private
     def get_position(self):
         """
         Return the x, y coord of npc or player on the screen.
         """
         return self.position
+
+    def get_health(self):
+        """
+        Return the health of ship.
+        """
+        return self._health
 
 
 class NPCShip(Ship):
@@ -136,6 +143,7 @@ class NPCShip(Ship):
     def __init__(self, position, name):
         self._position = position
         super().__init__(self._position, Vector2(0), name, True, True)
+        self._health = 2
 
     def move(self, surface, player):
         # Find direction vector (dx, dy) between enemy and player.

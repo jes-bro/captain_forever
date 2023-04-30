@@ -92,12 +92,17 @@ class CaptainForever:
         if self.player_ship:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
-                    position_to_end = self.player_ship.position
                     self.player_ship = NPCShip(
                         self.player_ship.position, "fire")
+                    self.player_ship.draw(self.screen)
                     self.message = "You lost!"
+                    print_text(self.screen, self.message, self.font)
+                    pygame.display.flip()
                     # What would be nice is if it paused for a sec and returned to a start menu
+                    pygame.time.delay(1000)
                     quit()
+                break
+
         # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
             if not self.screen.get_rect().collidepoint(bullet.position):
