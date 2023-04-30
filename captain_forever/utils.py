@@ -10,7 +10,7 @@ from pygame_animatedgif import AnimatedGifSprite
 
 
 # stores horizontal and vertical dimensions of pngs that need to be scaled
-dimensions = {"ship": (150, 200), "space_background": (
+dimensions = {"ship": (50, 50), "space_background": (
     1000, 800), "fire": (100, 100)}
 
 

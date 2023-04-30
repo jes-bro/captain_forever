@@ -2,6 +2,7 @@ import pygame
 from utils import load_sprite, load_sound, get_random_position, print_text
 from models import GameObject, Ship, NPCShip
 import time
+import random
 
 
 class CaptainForever:
@@ -20,7 +21,7 @@ class CaptainForever:
         self.bullets = []
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
-
+        self.enemy_spawn_counter = 0
         for _ in range(2):
             while True:
                 position = get_random_position(self.screen)
@@ -36,6 +37,9 @@ class CaptainForever:
         while True:
             self._handle_input()
             self._process_game_logic()
+            heads = random.randint(1, 100)
+            if self.enemy_spawn_counter % 4537172 == 0 and heads == 37:
+                self._spawn_enemy()
             self._draw()
 
     def _init_pygame(self):
@@ -62,9 +66,9 @@ class CaptainForever:
             elif is_key_pressed[pygame.K_LEFT]:
                 self.player_ship.rotate(clockwise=False)
             if is_key_pressed[pygame.K_UP]:
-                self.player_ship.accelerate()
+                self.player_ship.accelerate(acceleration_factor=0.5)
             elif is_key_pressed[pygame.K_DOWN]:
-                self.player_ship.deccelerate()
+                self.player_ship.deccelerate(deceleration_factor=0.5)
 
     def _get_game_objects(self):
         """
@@ -88,9 +92,12 @@ class CaptainForever:
         if self.player_ship:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
-                    self.player_ship = None
+                    position_to_end = self.player_ship.position
+                    self.player_ship = NPCShip(
+                        self.player_ship.position, "fire")
                     self.message = "You lost!"
-                    break
+                    # What would be nice is if it paused for a sec and returned to a start menu
+                    quit()
         # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
             if not self.screen.get_rect().collidepoint(bullet.position):
@@ -127,3 +134,17 @@ class CaptainForever:
 
         pygame.display.flip()
         self.clock.tick(60)
+
+    def _spawn_enemy(self):
+        """
+        Spawn in new enememy ship.
+        """
+        while True:
+            position = get_random_position(self.screen)
+            if (
+                position.distance_to(self.player_ship.position)
+                < self.ENEMY_SPAWN_DISTANCE
+            ):
+                break
+            # second argument specifies ship and not fire
+            self.npc_ships.append(NPCShip(position, "ship"))

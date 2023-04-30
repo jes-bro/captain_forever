@@ -82,17 +82,19 @@ class Ship(GameObject):
         angle = self.MANEUVERABILITY * sign
         self.direction.rotate_ip(angle)
 
-    def accelerate(self):
+    def accelerate(self, acceleration_factor):
         """
         increases velocity of the ship in the direction it is facing
         """
-        self.velocity += 0.5 * (self.direction * self.ACCELERATION)
+        self.velocity += acceleration_factor * \
+            (self.direction * self.ACCELERATION)
 
-    def deccelerate(self):
+    def deccelerate(self, deceleration_factor):
         """
         decreases velocity of the ship in the direction it is facing
         """
-        self.velocity -= 0.5 * (self.direction * self.ACCELERATION)
+        self.velocity -= deceleration_factor * \
+            (self.direction * self.ACCELERATION)
 
     def shoot(self):
         """
@@ -147,7 +149,7 @@ class NPCShip(Ship):
         length_velocity_vec = self.velocity.magnitude()
         dirvect.scale_to_length(length_velocity_vec)
         self.velocity = dirvect
-        self.accelerate()
+        self.accelerate(0.25)
         self.position = wrap_position(self.position + self.velocity, surface)
 
     def move_randomly():
