@@ -119,6 +119,12 @@ class Ship(GameObject):
         """
         self._health = self._health - 1
 
+    def get_position(self):
+        """
+        Return the x, y coord of npc or player on the screen.
+        """
+        return self.position
+
 
 class NPCShip(Ship):
     """
@@ -129,24 +135,23 @@ class NPCShip(Ship):
         self._position = position
         super().__init__(self._position, Vector2(0), name, True, True)
 
-    def move_towards_player(self, player):
+    def move(self, surface, player):
         # Find direction vector (dx, dy) between enemy and player.
+        player_position = player.get_position()
         dirvect = pygame.math.Vector2(
-            player.rect.x - self.rect.x, player.rect.y - self.rect.y
+            player_position[0] -
+            self.position[0], player_position[1] - self.position[1]
         )
         dirvect.normalize()
         # Move along this normalized vector towards the player at current speed.
-        dirvect.scale_to_length(self.speed)
-        self.rect.move_ip(dirvect)
+        length_velocity_vec = self.velocity.magnitude()
+        dirvect.scale_to_length(length_velocity_vec)
+        self.velocity = dirvect
+        self.accelerate()
+        self.position = wrap_position(self.position + self.velocity, surface)
 
     def move_randomly():
         pass
-
-    def get_position(self):
-        """
-        Return the x, y coord of npc on the screen.
-        """
-        return self._position
 
 
 class Asteroid(GameObject):

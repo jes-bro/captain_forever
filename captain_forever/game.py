@@ -81,7 +81,10 @@ class CaptainForever:
         processes movement on non-destroyed game objects
         """
         for game_object in self._get_game_objects():
-            game_object.move(self.screen)
+            if game_object in self.npc_ships or game_object in self.fires:
+                game_object.move(self.screen, self.player_ship)
+            else:
+                game_object.move(self.screen)
         if self.player_ship:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
