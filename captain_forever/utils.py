@@ -1,11 +1,11 @@
 import random
+from pygame import sprite
 from pygame import Color
 from pygame.image import load
 from pygame.transform import scale
 from pygame.math import Vector2
 from pygame.mixer import Sound
 import os
-from pygame import GIFImage
 from pygame_animatedgif import AnimatedGifSprite
 
 
@@ -26,7 +26,8 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     loaded_sprite = load(f"../assets/sprites/{name}.png")
     loaded_sprite.rect = loaded_sprite.image.get_rect()
     if name in dimensions and with_scaling == True:
-        loaded_sprite = scale(loaded_sprite, (dimensions[name][0], dimensions[name][1]))
+        loaded_sprite = scale(
+            loaded_sprite, (dimensions[name][0], dimensions[name][1]))
     if with_alpha:
         return loaded_sprite.convert_alpha()
     else:
@@ -34,12 +35,16 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
 
 
 # Blow up enemy ship
-
-
-def explode():
+def explode(x_coord, y_coord):
     """
     Displays explosion sprite in place of enemy
     """
+    explosion = AnimatedGifSprite(
+        (x_coord, y_coord), "../assets/sprites/explosion.gif")
+    sprite_group = sprite.Group()
+    sprite_group.add(explosion)
+
+    return sprite_group
 
 
 def load_sound(name):
@@ -74,7 +79,8 @@ def get_random_position(surface):
         random_position: Vector2 2 item position vector, random pos
     """
     return Vector2(
-        random.randrange(surface.get_width()), random.randrange(surface.get_height())
+        random.randrange(surface.get_width()), random.randrange(
+            surface.get_height())
     )
 
 

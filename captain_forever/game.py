@@ -1,5 +1,5 @@
 import pygame
-from utils import load_sprite, load_sound, get_random_position, print_text
+from utils import load_sprite, load_sound, get_random_position, print_text, explode
 from models import GameObject, Ship, NPCShip
 
 
@@ -92,7 +92,13 @@ class CaptainForever:
         for bullet in self.bullets[:]:
             for npc_ship in self.npc_ships[:]:
                 if npc_ship.collides_with(bullet):
+                    position_on_screen = npc_ship.get_position()
+                    sprite_group = explode(
+                        position_on_screen[0], position_on_screen[1])
+                    sprite_group.update(self.screen)
+                    sprite_group.draw(self.screen)
                     self.npc_ships.remove(npc_ship)
+
                     self.bullets.remove(bullet)
                     npc_ship.split()
                     # load_sound("rock").play()
