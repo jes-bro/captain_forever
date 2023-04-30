@@ -1,6 +1,6 @@
 import pygame
 from utils import load_sprite, load_sound, get_random_position, print_text
-from models import GameObject, Ship, Asteroid
+from models import GameObject, Ship, NPCShip
 
 
 class CaptainForever:
@@ -14,11 +14,11 @@ class CaptainForever:
         self.font = pygame.font.Font(None, 64)
         self.message = ""
 
-        self.asteroids = []
+        self.npc_ships = []
         self.bullets = []
         self.player_ship = Ship((400, 400), self.bullets.append)
 
-        for _ in range(6):
+        for _ in range(2):
             while True:
                 position = get_random_position(self.screen)
                 if (
@@ -26,23 +26,17 @@ class CaptainForever:
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
-            self.asteroids.append(Asteroid(position, self.asteroids.append))
-
-        # ALL npc lines commented upon removal of Gameobject and implement of ship
-        # self.npc = GameObject((10, 10), load_sprite("ship", 150, 200), (1, 0))
-
-        # self.player_ship = pygame.transform.scale(self.player_ship, (35, 35))
-        # self.npc = pygame.transform.scale(self.mpc, (35, 35))
+            self.npc_ships.append(NPCShip(position))
 
     def main_loop(self):
         while True:
             self._handle_input()
             self._process_game_logic()
             self._draw()
-    
+
     def _init_pygame(self):
         pygame.init()
-        pygame.display.set_caption("Space Rocks")
+        pygame.display.set_caption("Captain Forever")
 
     def _handle_input(self):
         for event in pygame.event.get():
@@ -72,7 +66,7 @@ class CaptainForever:
         """
         returns all game objects that have not been destroyed
         """
-        game_objects = [*self.asteroids, *self.bullets]
+        game_objects = [*self.npc_ships, *self.bullets]
 
         if self.player_ship:
             game_objects.append(self.player_ship)

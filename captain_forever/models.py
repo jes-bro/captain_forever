@@ -2,6 +2,7 @@ import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
 from utils import get_random_velocity, load_sound, load_sprite, wrap_position
+from pygame.locals import *
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
 UP = Vector2(0, -1)
@@ -42,22 +43,24 @@ class Ship(GameObject):
     """
     represents player and npc ship instances
 
-    Constants: 
+    Constants:
         MANEUVERABILITY: int, degrees per second a ship can turn
         ACCELERATION: float, rate of cartesian transform velocity change
 
-    Args: 
+    Args:
         position: tuple of ints, position on surface to draw the ship
 
-    Methods: 
+    Methods:
         rotate: rotates the ship by MANEUVERABILITY degrees
         draws the ship on a surface with an applied rotation
 
     """
+
     MANEUVERABILITY = 3
-    ACCELERATION = .25
+    ACCELERATION = 0.20  # 0.25
     BULLET_SPEED = 3
-    #LASER_SOUND = load_sound("laser")
+    LASER_SOUND = load_sound("laser")
+
     def __init__(self, position, create_bullet_callback):
         """
         initializes Ship (NPC and player) and bullet callbacks
@@ -106,7 +109,7 @@ class Ship(GameObject):
         angle_to_transform = self.direction.angle_to(UP)
         rotated_surface = rotozoom(self.sprite, angle_to_transform, 1.0)
         rotated_surface_size = Vector2(rotated_surface.get_size())
-        blit_position = self.position - rotated_surface_size * .5
+        blit_position = self.position - rotated_surface_size * 0.5
         surface.blit(rotated_surface, blit_position)
 
     def reduce_health(self):
@@ -115,11 +118,27 @@ class Ship(GameObject):
         """
         self._health = self._health - 1
 
-class NPCShip(GameObject):
+
+class NPCShip(Ship):
     """
     Ship controlled by the computer
     """
-    def __init__(self):
+
+    def __init__(self, position):
+        self._position = position
+        super().__init__(self._position, load_sprite("ship"), Vector2(0))
+
+    def move_towards_player(self, player):
+        # Find direction vector (dx, dy) between enemy and player.
+        dirvect = pygame.math.Vector2(
+            player.rect.x - self.rect.x, player.rect.y - self.rect.y
+        )
+        dirvect.normalize()
+        # Move along this normalized vector towards the player at current speed.
+        dirvect.scale_to_length(self.speed)
+        self.rect.move_ip(dirvect)
+
+    def move_randomly():
         pass
 
 
@@ -127,7 +146,7 @@ class Asteroid(GameObject):
     """
     initializes an asteroid with random velocity from a given sprite
 
-    attributes: 
+    attributes:
         size: int (1 to 3) that represents sprite size family of the asteroid
     """
 
