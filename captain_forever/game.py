@@ -21,7 +21,7 @@ class CaptainForever:
         self.bullets = []
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
-        self.enemy_spawn_counter = 0
+
         for _ in range(2):
             while True:
                 position = get_random_position(self.screen)
@@ -123,7 +123,7 @@ class CaptainForever:
         draws the game objects onto the display
         """
         self.counter += 1
-        if self.counter % 100 == 0 and self.fires:
+        if self.counter % 50 == 0 and self.fires:
             self.fires.pop()
         self.screen.blit(self.background, (0, 0))
         for game_object in self._get_game_objects():
