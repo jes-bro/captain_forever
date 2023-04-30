@@ -5,24 +5,41 @@ from pygame.transform import scale
 from pygame.math import Vector2
 from pygame.mixer import Sound
 import os
+from pygame import GIFImage
+from pygame_animatedgif import AnimatedGifSprite
 
 
-def load_sprite(name, horizontal_dim=150, vertical_dim=200, with_alpha=True):
+# stores horizontal and vertical dimensions of pngs that need to be scaled
+dimensions = {"ship": (150, 200)}
+
+
+def load_sprite(name, with_alpha=True, with_scaling=False):
     """
     loads a sprite from assets/sprites to a surface with or without alpha
 
-    inputs: 
+    inputs:
         horizontal_dim: int, pix width
         verical_dim: int, pix height
         with_alpha: bool, whether to convert image for faster processing
     """
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
     loaded_sprite = load(f"../assets/sprites/{name}.png")
-    # loaded_sprite = scale(loaded_sprite, (horizontal_dim, vertical_dim))
+    loaded_sprite.rect = loaded_sprite.image.get_rect()
+    if name in dimensions and with_scaling == True:
+        loaded_sprite = scale(loaded_sprite, (dimensions[name][0], dimensions[name][1]))
     if with_alpha:
         return loaded_sprite.convert_alpha()
     else:
         return loaded_sprite.convert()
+
+
+# Blow up enemy ship
+
+
+def explode():
+    """
+    Displays explosion sprite in place of enemy
+    """
 
 
 def load_sound(name):
@@ -50,15 +67,14 @@ def get_random_position(surface):
     """
     returns a random position within a surface
 
-    inputs: 
+    inputs:
         surface: pygame surface, coordinates will be within maximum bounds
 
-    returns: 
+    returns:
         random_position: Vector2 2 item position vector, random pos
     """
     return Vector2(
-        random.randrange(surface.get_width()),
-        random.randrange(surface.get_height())
+        random.randrange(surface.get_width()), random.randrange(surface.get_height())
     )
 
 
@@ -66,7 +82,7 @@ def get_random_velocity(min_speed, max_speed):
     """
     generates a randomly oriented vector with magnitude between min and max speed
 
-    inputs: 
+    inputs:
         min_speed: int, min speed (magnitude of velocity) in pix/second
         max_speed: int, max speed (magnitude of velocity) in pix/second
     """
@@ -74,10 +90,11 @@ def get_random_velocity(min_speed, max_speed):
     angle = random.randrange(0, 360)
     return Vector2(speed, 0).rotate(angle)
 
+
 def print_text(surface, text, font, color=Color("tomato")):
     text_surface = font.render(text, True, color)
 
     rect = text_surface.get_rect()
-    rect.center = Vector2(surface.get_size())/2
+    rect.center = Vector2(surface.get_size()) / 2
 
     surface.blit(text_surface, rect)

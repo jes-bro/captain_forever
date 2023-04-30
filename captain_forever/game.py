@@ -26,7 +26,7 @@ class CaptainForever:
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
-            self.npc_ships.append(NPCShip(position))
+            self.npc_ships.append(NPCShip(position, True, True))
 
     def main_loop(self):
         while True:
@@ -79,22 +79,22 @@ class CaptainForever:
         for game_object in self._get_game_objects():
             game_object.move(self.screen)
         if self.player_ship:
-            for asteroid in self.asteroids:
-                if asteroid.collides_with(self.player_ship):
+            for npc_ship in self.npc_ships:
+                if npc_ship.collides_with(self.player_ship):
                     self.player_ship = None
                     self.message = "You lost!"
                     break
-
+        # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
             if not self.screen.get_rect().collidepoint(bullet.position):
                 self.bullets.remove(bullet)
-
+        # Check for bullet collisions with npc ships
         for bullet in self.bullets[:]:
-            for asteroid in self.asteroids[:]:
-                if asteroid.collides_with(bullet):
-                    self.asteroids.remove(asteroid)
+            for npc_ship in self.npc_ships[:]:
+                if npc_ship.collides_with(bullet):
+                    self.npc_ships.remove(npc_ship)
                     self.bullets.remove(bullet)
-                    asteroid.split()
+                    npc_ship.split()
                     # load_sound("rock").play()
 
                     break
