@@ -21,7 +21,7 @@ class CaptainForever:
         self.bullets = []
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
-
+        self.enemy_spawn_counter = 0
         for _ in range(2):
             while True:
                 position = get_random_position(self.screen)
