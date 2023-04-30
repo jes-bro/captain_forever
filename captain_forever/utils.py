@@ -11,7 +11,7 @@ from pygame_animatedgif import AnimatedGifSprite
 
 # stores horizontal and vertical dimensions of pngs that need to be scaled
 dimensions = {"ship": (150, 200), "space_background": (
-    1000, 800)}
+    1000, 800), "fire": (100, 100)}
 
 
 def load_sprite(name, with_alpha=True, with_scaling=False):
@@ -32,19 +32,6 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
         return loaded_sprite.convert_alpha()
     else:
         return loaded_sprite.convert()
-
-
-# Blow up enemy ship
-def explode(x_coord, y_coord):
-    """
-    Displays explosion sprite in place of enemy
-    """
-    explosion = AnimatedGifSprite(
-        (x_coord, y_coord), "../assets/sprites/explosion.gif")
-    sprite_group = sprite.Group()
-    sprite_group.add(explosion)
-
-    return sprite_group
 
 
 def load_sound(name):

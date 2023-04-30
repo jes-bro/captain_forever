@@ -1,6 +1,7 @@
 import pygame
-from utils import load_sprite, load_sound, get_random_position, print_text, explode
+from utils import load_sprite, load_sound, get_random_position, print_text
 from models import GameObject, Ship, NPCShip
+import time
 
 
 class CaptainForever:
@@ -13,7 +14,8 @@ class CaptainForever:
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""
-
+        self.counter = 0
+        self.fires = []
         self.npc_ships = []
         self.bullets = []
         self.player_ship = Ship(
@@ -27,7 +29,8 @@ class CaptainForever:
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
-            self.npc_ships.append(NPCShip(position))
+            # second argument specifies ship and not fire
+            self.npc_ships.append(NPCShip(position, "ship"))
 
     def main_loop(self):
         while True:
@@ -67,7 +70,7 @@ class CaptainForever:
         """
         returns all game objects that have not been destroyed
         """
-        game_objects = [*self.npc_ships, *self.bullets]
+        game_objects = [*self.npc_ships, *self.bullets, *self.fires]
 
         if self.player_ship:
             game_objects.append(self.player_ship)
@@ -94,14 +97,11 @@ class CaptainForever:
             for npc_ship in self.npc_ships[:]:
                 if npc_ship.collides_with(bullet):
                     position_on_screen = npc_ship.get_position()
-                    sprite_group = explode(
-                        position_on_screen[0], position_on_screen[1])
-                    sprite_group.update(self.screen)
-                    sprite_group.draw(self.screen)
                     self.npc_ships.remove(npc_ship)
-
                     self.bullets.remove(bullet)
-                    npc_ship.split()
+                    fire = NPCShip(position_on_screen, "fire")
+                    self.fires.append(fire)
+                    # self.npc_ships.remove(fire)
                     # load_sound("rock").play()
 
                     break
@@ -112,6 +112,9 @@ class CaptainForever:
         """
         draws the game objects onto the display
         """
+        self.counter += 1
+        if self.counter % 100 == 0 and self.fires:
+            self.fires.pop()
         self.screen.blit(self.background, (0, 0))
         for game_object in self._get_game_objects():
             game_object.draw(self.screen)

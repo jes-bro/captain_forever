@@ -125,9 +125,9 @@ class NPCShip(Ship):
     Ship controlled by the computer
     """
 
-    def __init__(self, position):
+    def __init__(self, position, name):
         self._position = position
-        super().__init__(self._position, Vector2(0), "ship", True, True)
+        super().__init__(self._position, Vector2(0), name, True, True)
 
     def move_towards_player(self, player):
         # Find direction vector (dx, dy) between enemy and player.
