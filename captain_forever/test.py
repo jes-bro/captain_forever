@@ -38,15 +38,21 @@ screen = pygame.display.set_mode(size)
 # Clock
 clock = pygame.time.Clock()
 
+# initialize image name from sprites
+image_name = "fire_smol"
+
 # Load image
-image = pygame.image.load("../assets/sprites/player_ship_smol.png")
+image = pygame.image.load(f"../assets/sprites/{image_name}.png")
 
 # Set the size for the image
 DEFAULT_IMAGE_SIZE = (75, 75)
 
 # Scale the image to your needed size
 image = pygame.transform.scale(image, DEFAULT_IMAGE_SIZE)
-# pygame.image.save(image, "../assets/sprites/ship.png")
+
+# THESE LINES SAVES THE IMAGE
+# new_image_name = "fire"
+# pygame.image.save(image, f"../assets/sprites/{new_image_name}.png")
 
 # Set a default position
 DEFAULT_IMAGE_POSITION = (200, 200)
