@@ -60,7 +60,7 @@ class CaptainForever:
                 self.player_ship.shoot()
         is_key_pressed = pygame.key.get_pressed()
 
-        if self.player_ship:
+        if not self.message:
             if is_key_pressed[pygame.K_RIGHT]:
                 self.player_ship.rotate(clockwise=True)
             elif is_key_pressed[pygame.K_LEFT]:
