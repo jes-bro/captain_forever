@@ -140,9 +140,9 @@ class NPCShip(Ship):
     Ship controlled by the computer
     """
 
-    def __init__(self, position, name):
+    def __init__(self, position, name, create_bullet_callback):
         self._position = position
-        super().__init__(self._position, Vector2(0), name, True, True)
+        super().__init__(self._position, create_bullet_callback, name, True, True)
         self._health = 2
 
     def move(self, surface, player):
@@ -159,6 +159,7 @@ class NPCShip(Ship):
             self.rotate(clockwise = False)
         else:
             self.velocity = Vector2(0)
+            # self.shoot()
             if dirvect.magnitude() > 300:
                 self.velocity = dirvect.normalize() * 2
             if dirvect.magnitude() < 150: 
@@ -166,7 +167,7 @@ class NPCShip(Ship):
             
         
         # Move along this normalized vector towards the player at current speed.
-        # 
+        #
         self.position = wrap_position(self.position + self.velocity, surface)
 
     def move_randomly():

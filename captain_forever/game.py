@@ -31,7 +31,7 @@ class CaptainForever:
                 ):
                     break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship"))
+            self.npc_ships.append(NPCShip(position, "ship", self.bullets.append))
 
     def main_loop(self):
         while True:
@@ -99,11 +99,11 @@ class CaptainForever:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
                     self.player_ship = NPCShip(
-                        self.player_ship.position, "fire")
+                    self.player_ship.position, "fire")
                     self.player_ship.draw(self.screen)
                     self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
-                break
+                    break
 
         # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
@@ -116,12 +116,13 @@ class CaptainForever:
                     position_on_screen = npc_ship.get_position()
                     self.npc_ships.remove(npc_ship)
                     self.bullets.remove(bullet)
-                    fire = NPCShip(position_on_screen, "fire")
+                    fire = NPCShip(position_on_screen, "fire", self.bullets.append)
                     self.fires.append(fire)
+
                     # self.npc_ships.remove(fire)
                     # load_sound("rock").play()
 
-                    break
+                    # break
         if not self.npc_ships and self.player_ship:
             self._end_game_message("won")
 
@@ -160,4 +161,4 @@ class CaptainForever:
             ):
                 break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship"))
+            self.npc_ships.append(NPCShip(position, "ship", self.bullets.append))
