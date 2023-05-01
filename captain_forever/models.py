@@ -58,7 +58,7 @@ class Ship(GameObject):
 
     MANEUVERABILITY = 3
     ACCELERATION = 0.20  # 0.25
-    BULLET_SPEED = 3
+    BULLET_SPEED = 9
     LASER_SOUND = load_sound("laser")
 
     def __init__(self, position, create_bullet_callback, name, with_alpha, with_scaling):
@@ -152,12 +152,21 @@ class NPCShip(Ship):
             player_position[0] -
             self.position[0], player_position[1] - self.position[1]
         )
-        dirvect.normalize()
+        error_angle = self.direction.angle_to(dirvect)
+        if error_angle > .5:
+            self.rotate()
+        if error_angle < -.5:
+            self.rotate(clockwise = False)
+        else:
+            self.velocity = Vector2(0)
+            if dirvect.magnitude() > 300:
+                self.velocity = dirvect.normalize() * 2
+            if dirvect.magnitude() < 150: 
+                self.velocity = dirvect.normalize() * -1
+            
+        
         # Move along this normalized vector towards the player at current speed.
-        length_velocity_vec = self.velocity.magnitude()
-        dirvect.scale_to_length(length_velocity_vec)
-        self.velocity = dirvect
-        self.accelerate(0.25)
+        # 
         self.position = wrap_position(self.position + self.velocity, surface)
 
     def move_randomly():
