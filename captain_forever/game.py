@@ -38,9 +38,9 @@ class CaptainForever:
         while True:
             self._handle_input()
             self._process_game_logic()
-            heads = random.randint(1, 100)
-            if self.enemy_spawn_counter % 4537172 == 0 and heads == 37:
-                self._spawn_enemy()
+            # heads = random.randint(1, 100)
+            # if self.enemy_spawn_counter % 4537172 == 0 and heads == 37:
+            #     self._spawn_enemy()
             self._draw()
 
     def _init_pygame(self):
@@ -120,17 +120,24 @@ class CaptainForever:
                 if npc_ship.collides_with(bullet):
                     position_on_screen = npc_ship.get_position()
                     self.npc_ships.remove(npc_ship)
-                    self.bullets.remove(bullet)
                     fire = NPCShip(position_on_screen, "fire", self.npc_bullets.append)
                     self.fires.append(fire)
         
         for bullet in self.npc_bullets[:]:
-            pass
+            if self.player_ship.collides_with(bullet):
+                self.npc_bullets.remove(bullet)
+                self.player_ship.reduce_health()
+                if self.player_ship.get_health() == 0:
+                    self.player_ship = NPCShip(
+                    self.player_ship.position, "fire", self.npc_bullets.append)
+                    self._end_game_message("lost")
 
-                    # self.npc_ships.remove(fire)
-                    # load_sound("rock").play()
+        if len(self.npc_ships) < 8:
+            self.enemy_spawn_counter += 5
+            if self.enemy_spawn_counter > 500:
+                self.enemy_spawn_counter = 0
+                self._spawn_enemy()
 
-                    # break
         if not self.npc_ships and self.player_ship:
             self._end_game_message("won")
 
