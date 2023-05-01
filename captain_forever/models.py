@@ -140,10 +140,13 @@ class NPCShip(Ship):
     Ship controlled by the computer
     """
 
+    BULLET_DELAY = 1
+
     def __init__(self, position, name, create_bullet_callback):
         self._position = position
         super().__init__(self._position, create_bullet_callback, name, True, True)
         self._health = 2
+        self.clock = pygame.time.Clock()
 
     def move(self, surface, player):
         # Find direction vector (dx, dy) between enemy and player.
@@ -153,13 +156,11 @@ class NPCShip(Ship):
             self.position[0], player_position[1] - self.position[1]
         )
         error_angle = self.direction.angle_to(dirvect)
-        if error_angle > .5:
-            self.rotate()
-        if error_angle < -.5:
-            self.rotate(clockwise = False)
+        if error_angle > 3 or error_angle < -3:
+            self.rotate(clockwise= (error_angle > 0))
         else:
             self.velocity = Vector2(0)
-            # self.shoot()
+            self.shoot()
             if dirvect.magnitude() > 300:
                 self.velocity = dirvect.normalize() * 2
             if dirvect.magnitude() < 150: 
@@ -167,11 +168,17 @@ class NPCShip(Ship):
             
         
         # Move along this normalized vector towards the player at current speed.
-        #
         self.position = wrap_position(self.position + self.velocity, surface)
-
-    def move_randomly():
-        pass
+    
+    def shoot(self):
+        """
+        creates a bullet shooting in the direction of the ship from its position
+        """
+        time_since_last = self.clock.tick()
+        if time_since_last >= 1000*self.BULLET_DELAY:
+            bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
+            bullet = Bullet(self.position, bullet_velocity)
+            self.create_bullet_callback(bullet)
 
 
 class Asteroid(GameObject):

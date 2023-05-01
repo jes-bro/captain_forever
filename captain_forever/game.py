@@ -18,6 +18,7 @@ class CaptainForever:
         self.counter = 0
         self.fires = []
         self.npc_ships = []
+        self.npc_bullets = []
         self.bullets = []
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
@@ -31,7 +32,7 @@ class CaptainForever:
                 ):
                     break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship", self.bullets.append))
+            self.npc_ships.append(NPCShip(position, "ship", self.npc_bullets.append))
 
     def main_loop(self):
         while True:
@@ -79,7 +80,7 @@ class CaptainForever:
         """
         returns all game objects that have not been destroyed
         """
-        game_objects = [*self.npc_ships, *self.bullets, *self.fires]
+        game_objects = [*self.npc_ships, *self.bullets, *self.npc_bullets, *self.fires]
 
         if self.player_ship:
             game_objects.append(self.player_ship)
@@ -95,18 +96,17 @@ class CaptainForever:
                     game_object.move(self.screen, self.player_ship)
                 else:
                     game_object.move(self.screen)
-        if self.player_ship:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
                     self.player_ship = NPCShip(
-                    self.player_ship.position, "fire")
-                    self.player_ship.draw(self.screen)
+                    self.player_ship.position, "fire", self.npc_bullets.append)
+                    # self.player_ship.draw(self.screen)
                     self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
 
         # Check for bullet not hitting anything
-        for bullet in self.bullets[:]:
+        for bullet in self.bullets[:] and self.npc_bullets:
             if not self.screen.get_rect().collidepoint(bullet.position):
                 self.bullets.remove(bullet)
         # Check for bullet collisions with npc ships
@@ -116,7 +116,7 @@ class CaptainForever:
                     position_on_screen = npc_ship.get_position()
                     self.npc_ships.remove(npc_ship)
                     self.bullets.remove(bullet)
-                    fire = NPCShip(position_on_screen, "fire", self.bullets.append)
+                    fire = NPCShip(position_on_screen, "fire", self.npc_bullets.append)
                     self.fires.append(fire)
 
                     # self.npc_ships.remove(fire)
@@ -161,4 +161,4 @@ class CaptainForever:
             ):
                 break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship", self.bullets.append))
+            self.npc_ships.append(NPCShip(position, "ship", self.npc_bullets.append))
