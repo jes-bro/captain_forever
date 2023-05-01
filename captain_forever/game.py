@@ -106,9 +106,14 @@ class CaptainForever:
                     break
 
         # Check for bullet not hitting anything
-        for bullet in self.bullets[:] and self.npc_bullets:
+        for bullet in self.bullets[:]:
             if not self.screen.get_rect().collidepoint(bullet.position):
                 self.bullets.remove(bullet)
+
+        for bullet in self.npc_bullets[:]:
+            if not self.screen.get_rect().collidepoint(bullet.position):
+                self.npc_bullets.remove(bullet)
+
         # Check for bullet collisions with npc ships
         for bullet in self.bullets[:]:
             for npc_ship in self.npc_ships[:]:
@@ -118,6 +123,9 @@ class CaptainForever:
                     self.bullets.remove(bullet)
                     fire = NPCShip(position_on_screen, "fire", self.npc_bullets.append)
                     self.fires.append(fire)
+        
+        for bullet in self.npc_bullets[:]:
+            pass
 
                     # self.npc_ships.remove(fire)
                     # load_sound("rock").play()

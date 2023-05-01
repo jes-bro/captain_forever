@@ -147,6 +147,8 @@ class NPCShip(Ship):
         super().__init__(self._position, create_bullet_callback, name, True, True)
         self._health = 2
         self.clock = pygame.time.Clock()
+        self._shooting_delay = 0
+
 
     def move(self, surface, player):
         # Find direction vector (dx, dy) between enemy and player.
@@ -164,9 +166,8 @@ class NPCShip(Ship):
             if dirvect.magnitude() > 300:
                 self.velocity = dirvect.normalize() * 2
             if dirvect.magnitude() < 150: 
-                self.velocity = dirvect.normalize() * -1
-            
-        
+                self.velocity = dirvect.normalize() * -2
+    
         # Move along this normalized vector towards the player at current speed.
         self.position = wrap_position(self.position + self.velocity, surface)
     
@@ -174,8 +175,9 @@ class NPCShip(Ship):
         """
         creates a bullet shooting in the direction of the ship from its position
         """
-        time_since_last = self.clock.tick()
-        if time_since_last >= 1000*self.BULLET_DELAY:
+        self._shooting_delay += 9
+        if self._shooting_delay > 1000*self.BULLET_DELAY:
+            self._shooting_delay = 0
             bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
             bullet = Bullet(self.position, bullet_velocity)
             self.create_bullet_callback(bullet)
