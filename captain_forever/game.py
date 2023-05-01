@@ -23,7 +23,7 @@ class CaptainForever:
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
         self.enemy_spawn_counter = 0
-        for _ in range(2):
+        for _ in range(3):
             while True:
                 position = get_random_position(self.screen)
                 if (
@@ -104,6 +104,13 @@ class CaptainForever:
                     self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
+            if len(self.npc_ships) < 8:
+                self.enemy_spawn_counter += 5
+                # enemy spawning scales with number of enemies left
+                if self.enemy_spawn_counter > len(self.npc_ships)*125:
+                    self.enemy_spawn_counter = 0
+                    self._spawn_enemy()
+
 
         # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
@@ -132,11 +139,6 @@ class CaptainForever:
                     self.player_ship.position, "fire", self.npc_bullets.append)
                     self._end_game_message("lost")
 
-        if len(self.npc_ships) < 8:
-            self.enemy_spawn_counter += 5
-            if self.enemy_spawn_counter > 500:
-                self.enemy_spawn_counter = 0
-                self._spawn_enemy()
 
         if not self.npc_ships and self.player_ship:
             self._end_game_message("won")
