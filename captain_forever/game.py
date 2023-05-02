@@ -1,9 +1,6 @@
 import pygame
-from utils import load_sprite, get_random_position, print_text
-from models import GameObject, Ship, NPCShip
-import time
-import random
-from controller import WASDController
+from utils import load_sprite, get_random_position
+from models import Ship, NPCShip
 
 
 class CaptainForever:
@@ -36,11 +33,11 @@ class CaptainForever:
             self.npc_ships.append(
                 NPCShip(position, "ship", self.npc_bullets.append))
 
-    def main_loop(self, controller):
+    def main_loop(self, controller, view):
         while True:
             controller.maneuver_player_ship()
             self._process_game_logic()
-            self._draw()
+            view.draw()
 
     def _init_pygame(self):
         pygame.init()
@@ -118,23 +115,6 @@ class CaptainForever:
         displays a won/lost string at the end of the game
         """
         self.message = f"You {won_lost_str}! \n To exit, press escape \n To start a new game, press enter"
-
-    def _draw(self):
-        """
-        draws the game objects onto the display
-        """
-        self.counter += 1
-        if self.counter % 50 == 0 and self.fires:
-            self.fires.pop()
-        self.screen.blit(self.background, (0, 0))
-        for game_object in self._get_game_objects():
-            game_object.draw(self.screen)
-
-        if self.message:
-            print_text(self.screen, self.message, self.font)
-
-        pygame.display.flip()
-        self.clock.tick(60)
 
     def _spawn_enemy(self):
         """
