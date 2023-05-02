@@ -1,8 +1,9 @@
 import pygame
-from utils import load_sprite, load_sound, get_random_position, print_text
+from utils import load_sprite, get_random_position, print_text
 from models import GameObject, Ship, NPCShip
 import time
 import random
+from controller import WASDController
 
 
 class CaptainForever:
@@ -32,55 +33,25 @@ class CaptainForever:
                 ):
                     break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship", self.npc_bullets.append))
+            self.npc_ships.append(
+                NPCShip(position, "ship", self.npc_bullets.append))
 
-    def main_loop(self):
+    def main_loop(self, controller):
         while True:
-            self._handle_input()
+            controller.maneuver_player_ship()
             self._process_game_logic()
-            # heads = random.randint(1, 100)
-            # if self.enemy_spawn_counter % 4537172 == 0 and heads == 37:
-            #     self._spawn_enemy()
             self._draw()
 
     def _init_pygame(self):
         pygame.init()
         pygame.display.set_caption("Captain Forever")
 
-    def _handle_input(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (
-                event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
-            ):
-                quit()
-            elif (
-                self.player_ship
-                and event.type == pygame.KEYDOWN
-                and event.key == pygame.K_SPACE
-            ):
-                self.player_ship.shoot()
-        is_key_pressed = pygame.key.get_pressed()
-
-        if not self.message:
-            if is_key_pressed[pygame.K_RIGHT]:
-                self.player_ship.rotate(clockwise=True)
-            elif is_key_pressed[pygame.K_LEFT]:
-                self.player_ship.rotate(clockwise=False)
-            if is_key_pressed[pygame.K_UP]:
-                self.player_ship.accelerate(acceleration_factor=0.5)
-            elif is_key_pressed[pygame.K_DOWN]:
-                self.player_ship.deccelerate(deceleration_factor=0.5)
-            
-        if self.message: 
-            if is_key_pressed[pygame.K_KP_ENTER] or is_key_pressed[pygame.K_RETURN]:
-                self.__init__()
-
-
     def _get_game_objects(self):
         """
         returns all game objects that have not been destroyed
         """
-        game_objects = [*self.npc_ships, *self.bullets, *self.npc_bullets, *self.fires]
+        game_objects = [*self.npc_ships, *self.bullets,
+                        *self.npc_bullets, *self.fires]
 
         if self.player_ship:
             game_objects.append(self.player_ship)
@@ -99,7 +70,7 @@ class CaptainForever:
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
                     self.player_ship = NPCShip(
-                    self.player_ship.position, "fire", self.npc_bullets.append)
+                        self.player_ship.position, "fire", self.npc_bullets.append)
                     # self.player_ship.draw(self.screen)
                     self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
@@ -110,7 +81,6 @@ class CaptainForever:
                 if self.enemy_spawn_counter > len(self.npc_ships)*125:
                     self.enemy_spawn_counter = 0
                     self._spawn_enemy()
-
 
         # Check for bullet not hitting anything
         for bullet in self.bullets[:]:
@@ -127,18 +97,18 @@ class CaptainForever:
                 if npc_ship.collides_with(bullet):
                     position_on_screen = npc_ship.get_position()
                     self.npc_ships.remove(npc_ship)
-                    fire = NPCShip(position_on_screen, "fire", self.npc_bullets.append)
+                    fire = NPCShip(position_on_screen, "fire",
+                                   self.npc_bullets.append)
                     self.fires.append(fire)
-        
+
         for bullet in self.npc_bullets[:]:
             if self.player_ship.collides_with(bullet):
                 self.npc_bullets.remove(bullet)
                 self.player_ship.reduce_health()
                 if self.player_ship.get_health() == 0:
                     self.player_ship = NPCShip(
-                    self.player_ship.position, "fire", self.npc_bullets.append)
+                        self.player_ship.position, "fire", self.npc_bullets.append)
                     self._end_game_message("lost")
-
 
         if not self.npc_ships and self.player_ship:
             self._end_game_message("won")
@@ -178,4 +148,5 @@ class CaptainForever:
             ):
                 break
             # second argument specifies ship and not fire
-            self.npc_ships.append(NPCShip(position, "ship", self.npc_bullets.append))
+            self.npc_ships.append(
+                NPCShip(position, "ship", self.npc_bullets.append))

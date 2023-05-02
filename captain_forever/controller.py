@@ -1,49 +1,80 @@
+"""
+Captain Forever controller.
+"""
+from abc import ABC, abstractmethod
 import pygame
-import math
 
 
-class Controller:
-    def __init__(self, ship, x, y, speed):
-        self.x = x
-        self.y = y
-        self.speed = speed
-        self.angle = 0  # initial
-        self.vx = 0
-        self.vy = 0
-        self.ship = ship
+class CaptainForeverController(ABC):
+    """
+    Define class that handles how users interact with the
+    Captain Forever game.
 
-    def move_forward(self):
-        self.x += self.vx
-        self.y += self.vy
+    Attributes:
+        _game: An instance of the Captain Forever game
+        class.
+    """
 
-    def move_backward(self):
-        self.x -= self.vx
-        self.y -= self.vy
+    # Define your methods here.
+    def __init__(self, game):
+        """
+        Initialize CaptainForeverController.
 
-    def rotate(self, angle):
-        self.angle += angle
-        if self.angle >= 360:
-            self.angle -= 360
-        elif self.angle < 0:
-            self.angle += 360
+        Args:
+            game: An instance of the captain forever class
+            that gives the state of the game.
+        """
+        self._game = game
 
-        self.vx = math.cos(math.radians(self.angle)) * self.speed
-        self.vy = -math.sin(math.radians(self.angle)) * self.speed
+    @property
+    def game(self):
+        """
+        Return the state of the internal board
+        _game attribute.
+        """
+        return self._game
 
-    def move(self, input_key):
-        if input_key.type == pygame.KEYDOWN:
-            if input_key.key == pygame.K_a:  # Rotate counterclockwise
-                self.ship.rotate(-1)
-            elif input_key.key == pygame.K_d:  # Rotate clockwise
-                self.ship.rotate(1)
-            elif input_key.key == pygame.K_w:  # Forward
-                self.ship.move_forward()
-            elif input_key.key == pygame.K_s:  # Backward
-                self.ship.move_backward()
-        elif input_key.type == pygame.KEYUP:
-            if input_key.key in (pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s):
-                self.ship.stop_moving()
+    @abstractmethod
+    def maneuver_player_ship(self):
+        """
+        Move the player ship based on user input.
+        """
 
-    def update(self):
+
+class WASDController(CaptainForeverController):
+    """
+    Define controller that takes WASD keys as
+    user input.
+    """
+
+    def maneuver_player_ship(self):
+        """
+        Move the player ship based on user input.
+        """
+        game_state = self.game
         for event in pygame.event.get():
-            self.move(event)
+            if event.type == pygame.QUIT or (
+                event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
+            ):
+                quit()
+            elif (
+                game_state.player_ship
+                and event.type == pygame.KEYDOWN
+                and event.key == pygame.K_SPACE
+            ):
+                game_state.player_ship.shoot()
+        is_key_pressed = pygame.key.get_pressed()
+
+        if not game_state.message:
+            if is_key_pressed[pygame.K_RIGHT]:
+                game_state.player_ship.rotate(clockwise=True)
+            elif is_key_pressed[pygame.K_LEFT]:
+                game_state.player_ship.rotate(clockwise=False)
+            if is_key_pressed[pygame.K_UP]:
+                game_state.player_ship.accelerate(acceleration_factor=0.5)
+            elif is_key_pressed[pygame.K_DOWN]:
+                game_state.player_ship.deccelerate(deceleration_factor=0.5)
+
+        if game_state.message:
+            if is_key_pressed[pygame.K_KP_ENTER] or is_key_pressed[pygame.K_RETURN]:
+                game_state.__init__()
