@@ -2,7 +2,7 @@ import pygame
 from pygame.math import Vector2
 from pygame import Color
 from pygame.transform import rotozoom
-from utils import get_random_velocity, load_sound, load_sprite, wrap_position
+from utils import get_random_velocity, load_sprite, wrap_position  # , load_sound
 from pygame.locals import *
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
@@ -18,11 +18,16 @@ class GameObject:
         sprite: Pygame surface, image with some width and height
         radius: int, radius of the sprite
         velocity: Vector2, rate of change in x and y of the sprite
+
+    Methods: 
+        draw: draw object on a surface at position
+        move: move object's position by velocity (does not move, velocity = 0)
+        collides_with: calculate bool of whether object is colliding with another object
     """
 
     def __init__(self, position, sprite, velocity):
         """
-        Dnitialize a GameObject instance.
+        Initialize a GameObject instance.
         """
         self.position = Vector2(position)
         self.sprite = sprite
@@ -68,6 +73,11 @@ class StaticObject(GameObject):
         sprite: Pygame surface, image with some width and height
         radius: int, radius of the sprite
         velocity: Vector2, (0, 0) because these objects do not move
+
+    Methods: 
+        draw: draw object on a surface at position
+        move: move object's position by velocity (does not move, velocity = 0)
+        collides_with: calculate bool of whether object is colliding with another object
     """
 
     def __init__(self, position, name):
@@ -80,25 +90,36 @@ class StaticObject(GameObject):
 
 class Ship(GameObject):
     """
-    represents player and npc ship instances
+    Class for player and npc ship instances
 
     Constants:
         MANEUVERABILITY: int, degrees per second a ship can turn
         ACCELERATION: float, rate of cartesian transform velocity change
 
-    Args:
+    Attributes:
         position: tuple of ints, position (x, y) on surface to draw the ship
+        create_bullet_callback: function, function to add bullets to list to be processed
+        name: str, name of the file which the ship png is located in
+        direction: Vector2, x and y vector that shows orientation of sprite
+        _health: int, number of hits before the ship will die
+
 
     Methods:
-        rotate: rotates the ship by MANEUVERABILITY degrees
-        draws the ship on a surface with an applied rotation
+        rotate: rotate the ship's direction by MANEUVERABILITY degrees
+        accelerate: increase the ship velocity by ACCELERATION
+        deccelerate: increase the ship velocity by ACCELERATION
+        shoot: create Bullet instance with speed BULLET_SPEED
+        draw: draw the ship on a surface with an applied rotation
+        reduce_health: reduces _health by 1
+        move: move object's position by velocity (does not move, velocity = 0)
+        collides_with: calculate bool of whether object is colliding with another object
 
     """
 
     MANEUVERABILITY = 3
     ACCELERATION = 0.20  # 0.25
     BULLET_SPEED = 9
-    LASER_SOUND = load_sound("laser")
+    # LASER_SOUND = load_sound("laser")
 
     def __init__(self, position, create_bullet_callback, name, with_alpha, with_scaling):
         """
@@ -116,6 +137,9 @@ class Ship(GameObject):
     def rotate(self, clockwise=True):
         """
         Rotate the direction vector of the ship by MANEUVERABILITY degrees
+
+        Args:
+            clockwise: bool, whether the rotation is in clockwise direction
         """
         sign = 1 if clockwise else -1
         angle = self.MANEUVERABILITY * sign
@@ -124,20 +148,26 @@ class Ship(GameObject):
     def accelerate(self, acceleration_factor):
         """
         Increase velocity of the ship in the direction it is facing
+
+        Args: 
+            acceleration_factor: float, amount the velocity is increased by
         """
         self.velocity += acceleration_factor * \
             (self.direction * self.ACCELERATION)
 
     def deccelerate(self, deceleration_factor):
         """
-        Decrease velocity of the ship in the direction it is facing
+        Decrease velocity of the ship in the direction it is facing.
+
+        Args: 
+            deceleration_factor: float, amount the velocity is decreased by 
         """
         self.velocity -= deceleration_factor * \
             (self.direction * self.ACCELERATION)
 
     def shoot(self):
         """
-        Creates a bullet instance shooting in the direction of the ship from its position
+        Creates a bullet instance shooting in the direction of the ship from its position.
         """
         bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.position, bullet_velocity)
@@ -146,7 +176,7 @@ class Ship(GameObject):
 
     def draw(self, surface):
         """
-        Draws the ship on a surface with an applied rotation
+        Draw the ship sprite on a surface with an applied rotation.
 
         Args:
             surface: pygame surface, surface on which object will be drawn
@@ -159,16 +189,9 @@ class Ship(GameObject):
 
     def reduce_health(self):
         """
-        Reduces the ship health attribute by 1
+        Reduce the ship health attribute by 1.
         """
         self._health = self._health - 1
-
-# TODO: get rid of this cause position is not private
-    def get_position(self):
-        """
-        Return the x, y coord of npc or player on the screen.
-        """
-        return self.position
 
     def get_health(self):
         """
@@ -207,7 +230,7 @@ class NPCShip(Ship):
             player: Ship instance, player ship with position attribute
         """
         # Find direction vector (dx, dy) between enemy and player.
-        player_position = player.get_position()
+        player_position = player.position
         dirvect = pygame.math.Vector2(
             player_position[0] -
             self.position[0], player_position[1] - self.position[1]
@@ -228,7 +251,7 @@ class NPCShip(Ship):
 
     def shoot(self):
         """
-        creates a bullet shooting in the direction of the ship from its position
+        Creates a bullet shooting in the direction of the ship from its position
         """
         self._shooting_delay += 9
         if self._shooting_delay > 1000*self.BULLET_DELAY:
