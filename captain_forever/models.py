@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+from pygame import Color
 from pygame.transform import rotozoom
 from utils import get_random_velocity, load_sound, load_sprite, wrap_position
 from pygame.locals import *
@@ -37,6 +38,19 @@ class GameObject:
         """
         distance = self.position.distance_to(other_obj.position)
         return distance < self.radius + other_obj.radius
+
+
+class StaticObject(GameObject):
+    """
+    creates an object that does not move
+    """
+
+    def __init__(self, position, name):
+        """
+        initializes static object
+        """
+        super().__init__(position, load_sprite(
+            f"{name}", True, True), Vector2(0))
 
 
 class Ship(GameObject):
@@ -148,6 +162,13 @@ class NPCShip(Ship):
         self._health = 2
         self.clock = pygame.time.Clock()
         self._shooting_delay = 0
+
+        # creating new surface to recolor sprite
+        recolor_surface = pygame.Surface(
+            self.sprite.get_size(), pygame.SRCALPHA)
+        recolor_surface.fill(pygame.color.Color("green"))
+        self.sprite.blit(recolor_surface, (0, 0),
+                         special_flags=pygame.BLEND_ADD)
 
     def move(self, surface, player):
         # Find direction vector (dx, dy) between enemy and player.

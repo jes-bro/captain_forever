@@ -1,6 +1,6 @@
 import pygame
 from utils import load_sprite, get_random_position
-from models import Ship, NPCShip
+from models import Ship, NPCShip, StaticObject
 
 
 class CaptainForever:
@@ -60,15 +60,14 @@ class CaptainForever:
         """
         if not self.message:
             for game_object in self._get_game_objects():
-                if game_object in self.npc_ships or game_object in self.fires:
+                if game_object in self.npc_ships:  # or game_object in self.fires:
                     game_object.move(self.screen, self.player_ship)
                 else:
                     game_object.move(self.screen)
             for npc_ship in self.npc_ships:
                 if npc_ship.collides_with(self.player_ship):
-                    self.player_ship = NPCShip(
-                        self.player_ship.position, "fire", self.npc_bullets.append)
-                    # self.player_ship.draw(self.screen)
+                    self.player_ship = StaticObject(
+                        self.player_ship.position, "fire")
                     self._end_game_message("lost")
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
@@ -94,8 +93,7 @@ class CaptainForever:
                 if npc_ship.collides_with(bullet):
                     position_on_screen = npc_ship.get_position()
                     self.npc_ships.remove(npc_ship)
-                    fire = NPCShip(position_on_screen, "fire",
-                                   self.npc_bullets.append)
+                    fire = StaticObject(position_on_screen, "fire")
                     self.fires.append(fire)
 
         for bullet in self.npc_bullets[:]:
@@ -103,8 +101,8 @@ class CaptainForever:
                 self.npc_bullets.remove(bullet)
                 self.player_ship.reduce_health()
                 if self.player_ship.get_health() == 0:
-                    self.player_ship = NPCShip(
-                        self.player_ship.position, "fire", self.npc_bullets.append)
+                    self.player_ship = StaticObject(
+                        self.player_ship.position, "fire")
                     self._end_game_message("lost")
 
         if not self.npc_ships and self.player_ship:
