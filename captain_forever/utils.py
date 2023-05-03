@@ -29,12 +29,12 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
         return loaded_sprite.convert()
 
 
-def load_sound(name):
-    """
-    loads a sound from sound assets by its name
-    """
-    path = f"../assets/sounds/{name}.mp3"
-    # return Sound(path)
+# def load_sound(name):
+#     """
+#     loads a sound from sound assets by its name
+#     """
+#     path = f"../assets/sounds/{name}.mp3"
+#     # return Sound(path)
 
 
 def wrap_position(position, surface):
