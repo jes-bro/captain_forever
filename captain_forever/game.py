@@ -8,8 +8,8 @@ class CaptainForever:
 
     def __init__(self):
         self._init_pygame()
-        self.screen = pygame.display.set_mode((800, 600))
-        self.background = load_sprite("space_background", False, True)
+        self.screen = pygame.display.set_mode((1082, 720))
+        self.background = load_sprite("background", False, True)
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 64)
         self.message = ""

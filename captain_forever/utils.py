@@ -6,7 +6,7 @@ from pygame.math import Vector2
 
 # stores horizontal and vertical dimensions of pngs that need to be scaled
 dimensions = {"ship": (50, 50), "space_background": (
-    1000, 800), "fire": (100, 100)}
+    1000, 800), "fire": (100, 100), "background": (1082, 720)}
 
 
 def load_sprite(name, with_alpha=True, with_scaling=False):
