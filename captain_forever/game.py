@@ -4,6 +4,23 @@ from models import Ship, NPCShip, StaticObject
 
 
 class CaptainForever:
+    """
+    Top level game class which processes logic and calls view and control class.
+
+    Attributes: 
+        screen: pygame surface display instance, surface to draw game objects
+        background: pygame surface, background of game drawn each frame
+        clock: pygame clock instance, tracks game time
+        font: pygame font instance, controls font of endgame message
+        message: string, game state based on if string is "" or modified
+        counter: int, iterated counter to keep track of temporary objects
+        fires: lst, elements are StaticObject instances
+        npc_ships: lst, elements are NPCShip instances
+        npc_bullets: lst, elements are Bullet instances from NPCShip instances
+        bullets: lst, elements are Bullet instances from player_ship
+        player_ship: Ship instance representing player that responds to input
+        enemy_spawn_counter: int, iterated counter to keep track of spawning
+    """
     ENEMY_SPAWN_DISTANCE = 400
 
     def __init__(self):
@@ -45,7 +62,10 @@ class CaptainForever:
 
     def _get_game_objects(self):
         """
-        returns all game objects that have not been destroyed
+        Return all game objects that have not been destroyed.
+
+        Returns: 
+            game_objects: list of all game objects as class instances
         """
         game_objects = [*self.npc_ships, *self.bullets,
                         *self.npc_bullets, *self.fires]
@@ -56,7 +76,7 @@ class CaptainForever:
 
     def _process_game_logic(self):
         """
-        processes movement on non-destroyed game objects
+        Process movement, collisions, and game state on non-destroyed game objects.
         """
         if not self.message:
             for game_object in self._get_game_objects():
@@ -110,7 +130,11 @@ class CaptainForever:
 
     def _end_game_message(self, won_lost_str):
         """
-        displays a won/lost string at the end of the game
+        Create the game message and indicate whether the player won or lost.
+
+        Args: 
+            won_lost_str: string "won" or "lost" to modify the end game message
+                Other strings error.
         """
         self.message = f"You {won_lost_str}! \n To exit, press escape \n To start a new game, press enter"
 

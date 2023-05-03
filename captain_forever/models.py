@@ -10,9 +10,19 @@ UP = Vector2(0, -1)
 
 
 class GameObject:
+    """"
+    Game Object for storing sprites and attributes for game state and drawing
+
+    Attributes: 
+        position: Vector2, x and y position on the screen
+        sprite: Pygame surface, image with some width and height
+        radius: int, radius of the sprite
+        velocity: Vector2, rate of change in x and y of the sprite
+    """
+
     def __init__(self, position, sprite, velocity):
         """
-        initializes a GameObject instance
+        Dnitialize a GameObject instance.
         """
         self.position = Vector2(position)
         self.sprite = sprite
@@ -21,20 +31,29 @@ class GameObject:
 
     def draw(self, surface):
         """
-        draws the game object onto a surface at its current position
+        Draw the game object onto a surface at its current position.
+
+        Args: 
+            surface: pygame surface, surface on which object will be drawn
         """
         blit_position = self.position - Vector2(self.radius)
         surface.blit(self.sprite, blit_position)
 
     def move(self, surface):
         """
-        moves game objects and wraps screen-exiting objects back on
+        Move game objects and wrap surface-exiting objects back onto surface
+
+        Args: 
+            surface: pygame surface, surface on which object will be drawn
         """
         self.position = wrap_position(self.position + self.velocity, surface)
 
     def collides_with(self, other_obj):
         """
-        Returns whether a collision has occured between two game objects (bool)
+        Return whether a collision has occured between two game objects (bool)
+
+        Args:
+            other_obj: class instance inherited from GameObject with radius attribute
         """
         distance = self.position.distance_to(other_obj.position)
         return distance < self.radius + other_obj.radius
@@ -43,6 +62,12 @@ class GameObject:
 class StaticObject(GameObject):
     """
     creates an object that does not move
+
+    Attributes: 
+        position: Vector2, x and y position on the screen
+        sprite: Pygame surface, image with some width and height
+        radius: int, radius of the sprite
+        velocity: Vector2, (0, 0) because these objects do not move
     """
 
     def __init__(self, position, name):
@@ -77,7 +102,7 @@ class Ship(GameObject):
 
     def __init__(self, position, create_bullet_callback, name, with_alpha, with_scaling):
         """
-        initializes Ship (NPC and player) and bullet callbacks
+        Initialize Ship (NPC and player) and bullet callbacks
         """
         # creates callback for game to access bullets
         self.create_bullet_callback = create_bullet_callback
@@ -90,7 +115,7 @@ class Ship(GameObject):
 
     def rotate(self, clockwise=True):
         """
-        rotate the direction vector of the ship by MANEUVERABILITY degrees
+        Rotate the direction vector of the ship by MANEUVERABILITY degrees
         """
         sign = 1 if clockwise else -1
         angle = self.MANEUVERABILITY * sign
@@ -98,21 +123,21 @@ class Ship(GameObject):
 
     def accelerate(self, acceleration_factor):
         """
-        increases velocity of the ship in the direction it is facing
+        Increase velocity of the ship in the direction it is facing
         """
         self.velocity += acceleration_factor * \
             (self.direction * self.ACCELERATION)
 
     def deccelerate(self, deceleration_factor):
         """
-        decreases velocity of the ship in the direction it is facing
+        Decrease velocity of the ship in the direction it is facing
         """
         self.velocity -= deceleration_factor * \
             (self.direction * self.ACCELERATION)
 
     def shoot(self):
         """
-        creates a bullet shooting in the direction of the ship from its position
+        Creates a bullet instance shooting in the direction of the ship from its position
         """
         bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.position, bullet_velocity)
@@ -121,7 +146,10 @@ class Ship(GameObject):
 
     def draw(self, surface):
         """
-        draws the ship on a surface with an applied rotation
+        Draws the ship on a surface with an applied rotation
+
+        Args:
+            surface: pygame surface, surface on which object will be drawn
         """
         angle_to_transform = self.direction.angle_to(UP)
         rotated_surface = rotozoom(self.sprite, angle_to_transform, 1.0)
@@ -171,6 +199,13 @@ class NPCShip(Ship):
                          special_flags=pygame.BLEND_ADD)
 
     def move(self, surface, player):
+        """
+        Rotate the NPC ship to track player, approach upon appropriate heading
+
+        Args:
+            surface: pygame surface, surface on which object will be drawn
+            player: Ship instance, player ship with position attribute
+        """
         # Find direction vector (dx, dy) between enemy and player.
         player_position = player.get_position()
         dirvect = pygame.math.Vector2(
@@ -204,9 +239,14 @@ class NPCShip(Ship):
 
 
 class Bullet(GameObject):
+
     def __init__(self, position, velocity):
         """
-        initializes a bullet from a given sprite
+        initialize bullet from a given sprite
+
+        Args: 
+            position: Vector2 tuple of x and y initial position
+            velocity: Vector2 tuple of x and y velocity
         """
         super().__init__(position, load_sprite("bullet"), velocity)
 
