@@ -3,21 +3,6 @@ import view
 import pygame
 
 
-@pytest.mark.parametrize(
-    "actual_value,expected_value", pygame.display.get_init()
-)
-def test_display_initialization(actual_value, expected_value):
-    """
-    Check that the various initial display properties have been initialized to
-    the correct values.
-
-    Args:
-        actual_value: A tuple containing the initialized display property.
-        expected_value: A tuple containing the expected value for the property.
-    """
-    assert actual_value == expected_value
-
-
 @pytest.fixture
 def pygame_init():
     pygame.init()
