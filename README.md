@@ -16,7 +16,7 @@ This game uses Python 3.10.11 64-bit (Microsoft Store). We can only guarantee th
 
 To start, please ensure that you have this version of Python installed and that you are using the Python 3.10.11 interpreter in your IDE of choice.
 
-To install this game locally, use pip3 to install PyGame with the following command. Please install it for your Python 3.10.11 
+Use pip3 to install PyGame with the following command. It's the only external Python library we use outside of pytest for unit testing. Please install it for your Python 3.10.11 version.
 ```
 python3 -m pip install -U pygame --user
 ```
@@ -26,7 +26,7 @@ pip3.10 install pytest
 ```
 
 ## Setup Instructions
-Next, clone this repo into the directory of your choice. Then, cd into that directory, and then into the captain_forever directory, where __main__.py lives.
+To install this game locally, clone this repo into the directory of your choice. Then, cd into that directory, and then into the captain_forever directory, where __main__.py lives.
 To run the game, use the following command in your terminal:
 ```
 python3 __main__.py
