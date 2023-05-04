@@ -41,7 +41,7 @@ class CaptainForeverController(ABC):
         """
 
 
-class WASDController(CaptainForeverController):
+class ArrowController(CaptainForeverController):
     """
     Define controller that takes WASD keys as
     user input.
