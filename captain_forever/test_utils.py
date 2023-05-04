@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import MagicMock
 from pygame import Surface
 from pygame.font import SysFont
-from utils import load_sprite, load_sound, wrap_position, get_random_position, get_random_velocity
+from utils import load_sprite, wrap_position, get_random_position, get_random_velocity
 from view import print_text
 
 

@@ -4,40 +4,35 @@ Conquer the infinite expanse of space and become the ultimate Captain Forever!
 
 ## The big idea
 
-Captain Forever is an exhilarating spaceship adventure game that transports you, the captain, into the role of an interstellar pilot on a mission to defeat formidable enemy ships. In the midst of a cosmic field, you'll navigate a single spaceship while facing flying enemy ships that periodically cross your path. Your objective is to strategically shoot and annihilate them, all while avoiding collisions and dodging counter-fire. By surviving and destroying enemy ships, you'll forge an indelible legacy that transcends time and space – embodying the essence of the ultimate Captain Forever!
+Captain Forever is an exhilarating spaceship adventure game that transports you, the captain, into the role of an interstellar pilot on a mission to evade and destroy formidable enemy ships. In the midst of a cosmic field, you'll navigate a single spaceship while facing flying enemy ships that pursue and attempt to destroy you. If you take too many hits, you will explode! Your objective is to strategically shoot and annihilate them, all while avoiding collisions and dodging counter-fire. If you can destroy all of the enemy ships before reinforcements appear, you win!
 
-## Game tutorial: Learn How to Play
+## Specifications 
+* This game uses Python 3.10.11 64-bit (Microsoft Store).
+* We developed the software on Windows or in an Ubuntu VM for windows in the VSCode IDE. 
 
-This tutorial will guide you through the essential steps to play the game, help you understand its features, and show you how to control your in-game character.
+## Necessary Packages
 
-Step 1: Launch the Game
-Start by launching the game and navigating through the main menu.
-[Insert picture illustrating the main menu]
+This game uses Python 3.10.11 64-bit (Microsoft Store). We can only guarantee that this game work with this Python version. 
 
-Step 2: Get to Know the Ships
-Familiarize yourself with the different types of ships available in the game.
-[Insert picture showing various ship designs]
-Playership
-NPC ships
+To start, please ensure that you have this version of Python installed and that you are using the Python 3.10.11 interpreter in your IDE of choice.
 
-Step 3: Master the Controls
-Learn to control your ship's movement using the arrow keys on your keyboard.
-[Create & insert gifs depicting the correct use of arrow keys for in-game movement]
+Use pip3 to install PyGame with the following command. It's the only external Python library we use outside of pytest for unit testing. Please install it for your Python 3.10.11 version.
+```
+python3 -m pip install -U pygame --user
+```
+If you would like to run test files, please use the following command to install Pytest:
+```
+pip3.10 install pytest
+```
 
+## Setup Instructions
+To install this game locally, clone this repo into the directory of your choice. Then, cd into that directory, and then into the captain_forever directory, where __main__.py lives.
+To run the game, use the following command in your terminal:
+```
+python3 __main__.py
+```
 
-
-## GitHub Page:
-
-Captain Forever is an open-source project. To access the source code, report issues, or contribute to the development, visit our GitHub repository. 
-
-## About the Developer:
-
-Hi! We are... We hope you enjoy playing it as much as we enjoyed creating it!
-
-## Attributions: 
-
-Captain Forever is inspired by a classic arcade video game called Asteroids, a space-themed multidirectional shooter game designed by the dyanmic duo of Lyle Rains and Ed Logg and was released in November 1979 by Atari, Inc. 
-
-[Insert picture of the original game]
-
-Get ready to immerse yourself in a gaming experience that channels the spirit of this timeless classic!
+## Gameplay 
+* Use up and down arrows to translate forwards and back, respectively. Use right and left arrows to rotate clock-wise and counter-clock-wise, respectively. 
+* To quit, press escape or close the PyGame window with the demarked button in the upper-right-hand corner of the window. 
+* To restart the game, once you have won or lost, press enter or return. 
