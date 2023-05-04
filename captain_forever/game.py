@@ -20,7 +20,8 @@ class CaptainForever:
         bullets: List, elements are Bullet instances from player_ship.
         player_ship: Ship instance representing player that responds to input.
         enemy_spawn_counter: Int, iterated counter to keep track of spawning.
-        is_running: Bool: tells you if PyGame is running or not.
+        is_running: Bool, tells you if PyGame is running or not.
+        message_flag: String, tells you if you have won or lost the game.
     """
 
     ENEMY_SPAWN_DISTANCE = 400
@@ -42,6 +43,7 @@ class CaptainForever:
             (400, 400), self.bullets.append, "player", True, False
         )
         self.enemy_spawn_counter = 0
+        self.message_flag = ""
         for _ in range(3):
             while True:
                 position = get_random_position(self.screen)
@@ -106,7 +108,8 @@ class CaptainForever:
                     self.player_ship = StaticObject(
                         self.player_ship.position, "fire"
                     )
-                    self._end_game_message("lost")
+                    self.message_flag = "lost"
+                    self._end_game_message()
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
             if len(self.npc_ships) < 8:
@@ -142,12 +145,14 @@ class CaptainForever:
                     self.player_ship = StaticObject(
                         self.player_ship.position, "fire"
                     )
-                    self._end_game_message("lost")
+                    self.message_flag = "lost"
+                    self._end_game_message()
 
         if not self.npc_ships and self.player_ship:
-            self._end_game_message("won")
+            self.message_flag = "won"
+            self._end_game_message()
 
-    def _end_game_message(self, won_lost_str):
+    def _end_game_message(self):
         """
         Create the game message and indicate whether the player won or lost.
 
@@ -156,7 +161,7 @@ class CaptainForever:
                 Other strings error.
         """
         self.message = (
-            f"You {won_lost_str}! \n To exit, press escape \n To start a new"
+            f"You {self.message_flag}! \n To exit, press escape \n To start a new"
             " game, press enter"
         )
 
