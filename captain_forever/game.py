@@ -8,65 +8,90 @@ class CaptainForever:
     Top level game class which processes logic and calls view and control class.
 
     Attributes:
-        screen: PyGame surface display instance, surface to draw game objects.
-        background: PyGame surface, background of game drawn each frame.
-        clock: PyGame clock instance, tracks game time.
-        font: PyGame font instance, controls font of endgame message.
-        message: String, game state based on if string is "" or modified.
-        counter: Int, iterated counter to keep track of temporary objects.
-        fires: List, elements are StaticObject instances.
+        _fires: List, elements are StaticObject instances.
         npc_ships: List, elements are NPCShip instances.
         npc_bullets: List, elements are Bullet instances from NPCShip instances.
         bullets: List, elements are Bullet instances from player_ship.
         player_ship: Ship instance representing player that responds to input.
-        enemy_spawn_counter: Int, iterated counter to keep track of spawning.
+        _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
         is_running: Bool, tells you if PyGame is running or not.
-        message_flag: String, tells you if you have won or lost the game.
+        counter: Int, counter that helps us delay when fire disappears.
+        _message_flag: String, tells you if you have won or lost the game.
     """
 
     ENEMY_SPAWN_DISTANCE = 400
 
-    def __init__(self):
-        self._init_pygame()
-        self.screen = pygame.display.set_mode((1082, 720))
-        self.background = load_sprite("background", False, True)
-        self.clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 64)
-        self.message = ""
+    def __init__(self, width, height):
+        """
+        Initialize captain forever game attributes.
+
+        Args:
+            width: Int, represents width of screen.
+            height: Int, represents height of screen.
+        """
+        self._message = ""
+        self._fires = []
+        self._npc_ships = []
+        self._npc_bullets = []
+        self._bullets = []
         self.counter = 0
-        self.fires = []
-        self.npc_ships = []
-        self.npc_bullets = []
-        self.bullets = []
-        self.is_running = False
         self.player_ship = Ship(
-            (400, 400), self.bullets.append, "player", True, False
+            (400, 400), self._bullets.append, "player", True, False
         )
-        self.enemy_spawn_counter = 0
-        self.message_flag = ""
+        self._width = width
+        self._height = height
+        self._enemy_spawn_counter = 0
+        self._message_flag = ""
         for _ in range(3):
             while True:
-                position = get_random_position(self.screen)
+                position = get_random_position(width, height)
                 if (
                     position.distance_to(self.player_ship.position)
                     > self.ENEMY_SPAWN_DISTANCE
                 ):
                     break
             # second argument specifies ship and not fire
-            self.npc_ships.append(
-                NPCShip(position, "ship", self.npc_bullets.append)
+            self._npc_ships.append(
+                NPCShip(position, "ship", self._npc_bullets.append)
             )
+
+    @property
+    def message(self):
+        return self._message
+
+    @property
+    def fires(self):
+        return self._fires
+
+    @property
+    def bullets(self):
+        return self._bullets
+
+    @property
+    def npc_bullets(self):
+        return self._npc_bullets
+
+    @property
+    def npc_ships(self):
+        return self._npc_ships
+
+    @property
+    def enemy_spawn_counter(self):
+        return self._enemy_spawn_counter
+
+    @property
+    def message_flag(self):
+        return self._message_flag
+
+    @property
+    def is_running(self):
+        return isinstance(self.player_ship, Ship)
 
     def main_loop(self, controller, view):
         while True:
             controller.maneuver_player_ship()
             self._process_game_logic()
             view.draw()
-
-    def _init_pygame(self):
-        pygame.init()
-        self.is_running = True
-        pygame.display.set_caption("Captain Forever")
 
     def _get_game_objects(self):
         """
@@ -76,10 +101,10 @@ class CaptainForever:
             game_objects: list of all game objects as class instances
         """
         game_objects = [
-            *self.npc_ships,
-            *self.bullets,
-            *self.npc_bullets,
-            *self.fires,
+            *self._npc_ships,
+            *self._bullets,
+            *self._npc_bullets,
+            *self._fires,
         ]
 
         if self.player_ship:
@@ -90,78 +115,83 @@ class CaptainForever:
         """
         Process movement, collisions, and game state on non-destroyed game objects.
         """
-        if not self.message:
+        if not self._message:
             for game_object in self._get_game_objects():
                 if (
-                    game_object in self.npc_ships
-                ):  # or game_object in self.fires:
-                    game_object.move(self.screen, self.player_ship)
+                    game_object in self._npc_ships
+                ):  # or game_object in self._fires:
+                    game_object.move(self.player_ship,
+                                     self._width, self._height)
                 elif (
-                    game_object in self.bullets
-                    or game_object in self.npc_bullets
+                    game_object in self._bullets
+                    or game_object in self._npc_bullets
                 ):
                     game_object.move()
                 else:
-                    game_object.move(self.screen)
-            for npc_ship in self.npc_ships:
+                    game_object.move(self._width, self._height)
+            for npc_ship in self._npc_ships:
                 if npc_ship.collides_with(self.player_ship):
                     self.player_ship = StaticObject(
                         self.player_ship.position, "fire"
                     )
-                    self.message_flag = "lost"
+                    self._message_flag = "lost"
                     self._end_game_message()
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
-            if len(self.npc_ships) < 8:
-                self.enemy_spawn_counter += 5
+            if len(self._npc_ships) < 8:
+                self._enemy_spawn_counter += 5
                 # enemy spawning scales with number of enemies left
-                if self.enemy_spawn_counter > len(self.npc_ships) * 125:
-                    self.enemy_spawn_counter = 0
+                if self._enemy_spawn_counter > len(self._npc_ships) * 125:
+                    self._enemy_spawn_counter = 0
                     self._spawn_enemy()
 
         # Check for bullet not hitting anything
-        for bullet in self.bullets[:]:
-            if not self.screen.get_rect().collidepoint(bullet.position):
-                self.bullets.remove(bullet)
+        for bullet in self._bullets[:]:
+            if (bullet.position.x > self._width or
+                bullet.position.y > self._height or
+                    bullet.position.x < 0 or bullet.position.y < 0):
+                self._bullets.remove(bullet)
 
-        for bullet in self.npc_bullets[:]:
-            if not self.screen.get_rect().collidepoint(bullet.position):
-                self.npc_bullets.remove(bullet)
+        for bullet in self._npc_bullets[:]:
+            if (bullet.position.x > self._width or
+                bullet.position.y > self._height or
+                    bullet.position.x < 0 or bullet.position.y < 0):
+                self._npc_bullets.remove(bullet)
 
         # Check for bullet collisions with npc ships
-        for bullet in self.bullets[:]:
-            for npc_ship in self.npc_ships[:]:
+        for bullet in self._bullets[:]:
+            for npc_ship in self._npc_ships[:]:
                 if npc_ship.collides_with(bullet):
                     position_on_screen = npc_ship.position
-                    self.npc_ships.remove(npc_ship)
+                    self._npc_ships.remove(npc_ship)
                     fire = StaticObject(position_on_screen, "fire")
-                    self.fires.append(fire)
+                    self._fires.append(fire)
 
-        for bullet in self.npc_bullets[:]:
-            if self.player_ship.collides_with(bullet):
-                self.npc_bullets.remove(bullet)
+        for bullet in self._npc_bullets[:]:
+            if self.player_ship.collides_with(bullet) and self.is_running:
+                self._npc_bullets.remove(bullet)
                 self.player_ship.reduce_health()
                 if self.player_ship.get_health() == 0:
                     self.player_ship = StaticObject(
                         self.player_ship.position, "fire"
                     )
-                    self.message_flag = "lost"
+                    self._message_flag = "lost"
                     self._end_game_message()
 
-        if not self.npc_ships and self.player_ship:
-            self.message_flag = "won"
+        if not self._npc_ships and self.player_ship and self.is_running:
+            self._message_flag = "won"
             self._end_game_message()
 
     def _end_game_message(self):
         """
-        Create the game message and indicate whether the player won or lost.
+        Create the game _message and indicate whether the player won or lost.
 
         Args:
-            won_lost_str: string "won" or "lost" to modify the end game message
+            won_lost_str: string "won" or "lost" to modify the end game _message
                 Other strings error.
         """
-        self.message = (
-            f"You {self.message_flag}! \n To exit, press escape \n To start a new"
+        self._message = (
+            f"You {self._message_flag}! \n To exit, press escape \n To start a new"
             " game, press enter"
         )
 
@@ -170,13 +200,13 @@ class CaptainForever:
         Spawn in new enememy ship.
         """
         while True:
-            position = get_random_position(self.screen)
+            position = get_random_position(self._width, self._height)
             if (
                 position.distance_to(self.player_ship.position)
                 < self.ENEMY_SPAWN_DISTANCE
             ):
                 break
             # second argument specifies ship and not fire
-            self.npc_ships.append(
-                NPCShip(position, "ship", self.npc_bullets.append)
+            self._npc_ships.append(
+                NPCShip(position, "ship", self._npc_bullets.append)
             )

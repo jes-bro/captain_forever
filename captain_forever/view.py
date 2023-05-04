@@ -5,6 +5,7 @@ import pygame
 from abc import ABC, abstractmethod
 from pygame.math import Vector2
 from pygame import Color
+from utils import load_sprite
 
 
 class CaptainForeverView(ABC):
@@ -45,7 +46,20 @@ class CaptainForeverView(ABC):
 class PyGameView(CaptainForeverView):
     """
     Display the game elements using Pygame.
+
+    Attributes:
+        clock: PyGame clock instance, tracks game time.
+        screen: PyGame surface display instance, surface to draw game objects.
+        background: PyGame surface, background of game drawn each frame.
+        font: PyGame font instance, controls font of endgame message.
     """
+
+    def __init__(self, game, screen):
+        super().__init__(game)
+        self.screen = screen
+        self.background = load_sprite("background", False, True)
+        self._clock = pygame.time.Clock()
+        self.font = pygame.font.Font(None, 64)
 
     def draw(self):
         """
@@ -55,15 +69,15 @@ class PyGameView(CaptainForeverView):
         game.counter += 1
         if game.counter % 50 == 0 and game.fires:
             game.fires.pop()
-        game.screen.blit(game.background, (0, 0))
+        self.screen.blit(self.background, (0, 0))
         for game_object in game._get_game_objects():
-            game_object.draw(game.screen)
+            game_object.draw(self.screen)
 
         if game.message:
-            print_text(game.screen, game.message, game.font)
+            print_text(self.screen, game.message, self.font)
 
         pygame.display.flip()
-        game.clock.tick(60)
+        self._clock.tick(60)
 
 
 def print_text(surface, text, font, color=Color("tomato")):

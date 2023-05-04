@@ -50,14 +50,17 @@ class GameObject:
         blit_position = self.position - Vector2(self.radius)
         surface.blit(self.sprite, blit_position)
 
-    def move(self, surface):
+    def move(self, width, height):
         """
         Move game objects and wrap surface-exiting objects back onto surface
 
         Args:
             surface: pygame surface, surface on which object will be drawn
+            width: Int, represents width of screen.
+            height: Int, represents height of screen.
         """
-        self.position = wrap_position(self.position + self.velocity, surface)
+        self.position = wrap_position(
+            self.position + self.velocity, width, height)
 
     def collides_with(self, other_obj):
         """
@@ -230,7 +233,6 @@ class NPCShip(Ship):
             self._position, create_bullet_callback, name, True, True
         )
         self._health = 2
-        self.clock = pygame.time.Clock()
         self._shooting_delay = 0
 
         # creating new surface to recolor sprite
@@ -242,7 +244,7 @@ class NPCShip(Ship):
             recolor_surface, (0, 0), special_flags=pygame.BLEND_ADD
         )
 
-    def move(self, surface, player):
+    def move(self, player, width, height):
         """
         Rotate the NPC ship to track player, approach upon appropriate heading
 
@@ -268,7 +270,8 @@ class NPCShip(Ship):
                 self.velocity = dirvect.normalize() * -2
 
         # Move along this normalized vector towards the player at current speed.
-        self.position = wrap_position(self.position + self.velocity, surface)
+        self.position = wrap_position(
+            self.position + self.velocity, width, height)
 
     def shoot(self):
         """

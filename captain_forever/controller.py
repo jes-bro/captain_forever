@@ -1,8 +1,9 @@
 """
 Captain Forever controller.
 """
-from abc import ABC, abstractmethod
 import pygame
+from abc import ABC, abstractmethod
+from models import Ship
 
 
 class CaptainForeverController(ABC):
@@ -57,15 +58,15 @@ class ArrowController(CaptainForeverController):
             if event.type == pygame.QUIT or (
                 event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
             ):
-                game_state.is_running = False
                 quit()
             elif (
                 game_state.player_ship
                 and event.type == pygame.KEYDOWN
                 and event.key == pygame.K_SPACE
+                and game_state.is_running
             ):
                 game_state.player_ship.shoot()
-        if not testing:
+        if not testing and game_state.is_running:
             is_key_pressed = pygame.key.get_pressed()
 
             if not game_state.message:
@@ -84,7 +85,7 @@ class ArrowController(CaptainForeverController):
                     or is_key_pressed[pygame.K_RETURN]
                 ):
                     game_state.__init__()
-        else:
+        elif testing:
             if not game_state.message:
                 print("HERE HERE HERE")
                 if (

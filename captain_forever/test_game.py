@@ -4,8 +4,7 @@ Test the ArrowController class to respond appropriately to key inputs.
 import pytest
 import pygame
 from game import CaptainForever
-from models import Ship, GameObject, NPCShip, StaticObject
-from utils import load_sprite
+from models import Ship, NPCShip, StaticObject
 test_game = CaptainForever()
 
 init_cases = [
@@ -99,3 +98,4 @@ def test_process_game_logic(game_objects, expected_result):
     else:
         raise ValueError(f"Invalid expected_result: {expected_result}")
 
+# get game objects, end game message, spawn enemy
