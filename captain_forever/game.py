@@ -8,18 +8,19 @@ class CaptainForever:
     Top level game class which processes logic and calls view and control class.
 
     Attributes: 
-        screen: pygame surface display instance, surface to draw game objects
-        background: pygame surface, background of game drawn each frame
-        clock: pygame clock instance, tracks game time
-        font: pygame font instance, controls font of endgame message
-        message: string, game state based on if string is "" or modified
-        counter: int, iterated counter to keep track of temporary objects
-        fires: lst, elements are StaticObject instances
-        npc_ships: lst, elements are NPCShip instances
-        npc_bullets: lst, elements are Bullet instances from NPCShip instances
-        bullets: lst, elements are Bullet instances from player_ship
-        player_ship: Ship instance representing player that responds to input
-        enemy_spawn_counter: int, iterated counter to keep track of spawning
+        screen: PyGame surface display instance, surface to draw game objects.
+        background: PyGame surface, background of game drawn each frame.
+        clock: PyGame clock instance, tracks game time.
+        font: PyGame font instance, controls font of endgame message.
+        message: String, game state based on if string is "" or modified.
+        counter: Int, iterated counter to keep track of temporary objects.
+        fires: List, elements are StaticObject instances.
+        npc_ships: List, elements are NPCShip instances.
+        npc_bullets: List, elements are Bullet instances from NPCShip instances.
+        bullets: List, elements are Bullet instances from player_ship.
+        player_ship: Ship instance representing player that responds to input.
+        enemy_spawn_counter: Int, iterated counter to keep track of spawning.
+        is_running: Bool: tells you if PyGame is running or not.
     """
     ENEMY_SPAWN_DISTANCE = 400
 
@@ -35,6 +36,7 @@ class CaptainForever:
         self.npc_ships = []
         self.npc_bullets = []
         self.bullets = []
+        self.is_running = False
         self.player_ship = Ship(
             (400, 400), self.bullets.append, "player", True, False)
         self.enemy_spawn_counter = 0
@@ -58,6 +60,7 @@ class CaptainForever:
 
     def _init_pygame(self):
         pygame.init()
+        self.is_running = True
         pygame.display.set_caption("Captain Forever")
 
     def _get_game_objects(self):
