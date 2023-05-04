@@ -8,25 +8,26 @@ Captain Forever is an exhilarating spaceship adventure game that transports you,
 
 Piloting the ship is controlled by the arrow keys. Forward and backward acceleration are controlled by the up and down arrow keys, and clockwise and counter-clockwise rotation is controlled by the left and right arrow keys. Be careful with your speed, because there is no drag in space - you won’t slow down unless you accelerate in the opposite direction!
 
-To fire your laser cannon, press the spacebar. At any time you can exit the game by pressing the escape key. 
+To fire your cannon, press the spacebar. At any time you can exit the game by pressing the escape key. 
 
 You start the game with 3 lives, and each time you are hit by a laser your lives reduce by one. When you have zero lives, you explode!
 ![image](https://user-images.githubusercontent.com/37748104/236017078-cbfa4f49-d926-4683-a4c0-26b5daf8d9ba.png)
 
 The enemy ships will rotate to face your position, and then pursue you while firing. They are less maneuverable than you, and you can use the edges of the screen to disorient them when you appear in a new location. The more enemies you destroy, the faster their reinforcements arrive - you’ll have to be quick to defeat the fleet!
 
-Once the game is over, you can restart using the enter key or exit the game with escape.
+Once the game is over, you can restart using the enter key or exit the game with the escape key.
 
 ### Demo Video
 
+Here is the link to the video demo of the game: https://youtu.be/wVo04BFmMro
+
 ## Necessary Packages, Installation & Startup
 
-To run the files within this repo, you will need to install the PyGame library (https://www.pygame.org/wiki/GettingStarted) and then download the zip file from our repository (https://github.com/olincollege/captain_forever). After you have done this, you can run the main.py file with any Python interpreter (i.e. VisualStudio Code) and it will open a game window for you to enjoy Captain Forever!
-
+Here is the README.MD file that specify the installation instruction: https://github.com/olincollege/captain_forever/blob/main/README.md
 
 
 ## About the Authors
-We are Jesse, Rajiv and Muya! What inspired us to create this game was to rekindle the nostalgia of classic arcade gaming, for it captivate gamers with its simple yet addictive gameplay and distinctive vector graphics. We hope you enjoy playing it as much as we enjoyed creating it!
+We are Jess, Rajiv and Muya! What inspired us to create this game was to rekindle the nostalgia of classic arcade gaming, for it captivate gamers with its simple yet addictive gameplay and distinctive vector graphics. We hope you enjoy playing it as much as we enjoyed creating it!
 
 ## Attributions 
 
