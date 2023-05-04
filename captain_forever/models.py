@@ -2,7 +2,11 @@ import pygame
 from pygame.math import Vector2
 from pygame import Color
 from pygame.transform import rotozoom
-from utils import get_random_velocity, load_sprite, wrap_position  # , load_sound
+from utils import (
+    get_random_velocity,
+    load_sprite,
+    wrap_position,
+)  # , load_sound
 from pygame.locals import *
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
@@ -10,17 +14,17 @@ UP = Vector2(0, -1)
 
 
 class GameObject:
-    """"
+    """ "
     Game Object for storing sprites and attributes for game state and drawing
 
-    Attributes: 
+    Attributes:
         position: Vector2, x and y position on the screen
         sprite: Pygame surface, image with some width and height
         radius: int, radius of the sprite
         velocity: Vector2, rate of change in x and y of the sprite
         method_flag: Int, used to identify which function was called during testing.
 
-    Methods: 
+    Methods:
         draw: draw object on a surface at position
         move: move object's position by velocity (does not move, velocity = 0)
         collides_with: calculate bool of whether object is colliding with another object
@@ -40,7 +44,7 @@ class GameObject:
         """
         Draw the game object onto a surface at its current position.
 
-        Args: 
+        Args:
             surface: pygame surface, surface on which object will be drawn
         """
         blit_position = self.position - Vector2(self.radius)
@@ -50,7 +54,7 @@ class GameObject:
         """
         Move game objects and wrap surface-exiting objects back onto surface
 
-        Args: 
+        Args:
             surface: pygame surface, surface on which object will be drawn
         """
         self.position = wrap_position(self.position + self.velocity, surface)
@@ -70,13 +74,13 @@ class StaticObject(GameObject):
     """
     creates an object that does not move
 
-    Attributes: 
+    Attributes:
         position: Vector2, x and y position on the screen
         sprite: Pygame surface, image with some width and height
         radius: int, radius of the sprite
         velocity: Vector2, (0, 0) because these objects do not move
 
-    Methods: 
+    Methods:
         draw: draw object on a surface at position
         move: move object's position by velocity (does not move, velocity = 0)
         collides_with: calculate bool of whether object is colliding with another object
@@ -86,8 +90,9 @@ class StaticObject(GameObject):
         """
         initializes static object
         """
-        super().__init__(position, load_sprite(
-            f"{name}", True, True), Vector2(0))
+        super().__init__(
+            position, load_sprite(f"{name}", True, True), Vector2(0)
+        )
 
 
 class Ship(GameObject):
@@ -123,7 +128,9 @@ class Ship(GameObject):
     BULLET_SPEED = 9
     # LASER_SOUND = load_sound("laser")
 
-    def __init__(self, position, create_bullet_callback, name, with_alpha, with_scaling):
+    def __init__(
+        self, position, create_bullet_callback, name, with_alpha, with_scaling
+    ):
         """
         Initialize Ship (NPC and player) and bullet callbacks.
         """
@@ -133,8 +140,11 @@ class Ship(GameObject):
 
         # initialize unit vector upwards initial direction
         self.direction = Vector2(UP)
-        super().__init__(position, load_sprite(
-            f"{name}", with_alpha, with_scaling), Vector2(0))
+        super().__init__(
+            position,
+            load_sprite(f"{name}", with_alpha, with_scaling),
+            Vector2(0),
+        )
 
     def rotate(self, clockwise=True):
         """
@@ -152,23 +162,25 @@ class Ship(GameObject):
         """
         Increase velocity of the ship in the direction it is facing.
 
-        Args: 
+        Args:
             acceleration_factor: Float, amount the velocity is increased by.
         """
         self.method_flag = 5
-        self.velocity += acceleration_factor * \
-            (self.direction * self.ACCELERATION)
+        self.velocity += acceleration_factor * (
+            self.direction * self.ACCELERATION
+        )
 
     def deccelerate(self, deceleration_factor):
         """
         Decrease velocity of the ship in the direction it is facing.
 
-        Args: 
+        Args:
             deceleration_factor: Float, amount the velocity is decreased by.
         """
         self.method_flag = 6
-        self.velocity -= deceleration_factor * \
-            (self.direction * self.ACCELERATION)
+        self.velocity -= deceleration_factor * (
+            self.direction * self.ACCELERATION
+        )
 
     def shoot(self):
         """
@@ -214,17 +226,21 @@ class NPCShip(Ship):
 
     def __init__(self, position, name, create_bullet_callback):
         self._position = position
-        super().__init__(self._position, create_bullet_callback, name, True, True)
+        super().__init__(
+            self._position, create_bullet_callback, name, True, True
+        )
         self._health = 2
         self.clock = pygame.time.Clock()
         self._shooting_delay = 0
 
         # creating new surface to recolor sprite
         recolor_surface = pygame.Surface(
-            self.sprite.get_size(), pygame.SRCALPHA)
+            self.sprite.get_size(), pygame.SRCALPHA
+        )
         recolor_surface.fill(pygame.color.Color("green"))
-        self.sprite.blit(recolor_surface, (0, 0),
-                         special_flags=pygame.BLEND_ADD)
+        self.sprite.blit(
+            recolor_surface, (0, 0), special_flags=pygame.BLEND_ADD
+        )
 
     def move(self, surface, player):
         """
@@ -237,8 +253,8 @@ class NPCShip(Ship):
         # Find direction vector (dx, dy) between enemy and player.
         player_position = player.position
         dirvect = pygame.math.Vector2(
-            player_position[0] -
-            self.position[0], player_position[1] - self.position[1]
+            player_position[0] - self.position[0],
+            player_position[1] - self.position[1],
         )
         error_angle = self.direction.angle_to(dirvect)
         if error_angle > 3 or error_angle < -3:
@@ -259,7 +275,7 @@ class NPCShip(Ship):
         Creates a bullet shooting in the direction of the ship from its position.
         """
         self._shooting_delay += 9
-        if self._shooting_delay > 1000*self.BULLET_DELAY:
+        if self._shooting_delay > 1000 * self.BULLET_DELAY:
             self._shooting_delay = 0
             bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
             bullet = Bullet(self.position, bullet_velocity)
@@ -267,12 +283,11 @@ class NPCShip(Ship):
 
 
 class Bullet(GameObject):
-
     def __init__(self, position, velocity):
         """
         Initialize bullet from a given sprite.
 
-        Args: 
+        Args:
             position: Vector2 tuple of x and y initial position.
             velocity: Vector2 tuple of x and y velocity.
         """

@@ -47,7 +47,7 @@ class ArrowController(CaptainForeverController):
     user input.
     """
 
-    def maneuver_player_ship(self):
+    def maneuver_player_ship(self, testing=False):
         """
         Move the player ship based on user input.
         """
@@ -65,7 +65,26 @@ class ArrowController(CaptainForeverController):
                 and event.key == pygame.K_SPACE
             ):
                 game_state.player_ship.shoot()
+        if not testing:
+            is_key_pressed = pygame.key.get_pressed()
 
+            if not game_state.message:
+                if is_key_pressed[pygame.K_RIGHT]:
+                    game_state.player_ship.rotate(clockwise=True)
+                elif is_key_pressed[pygame.K_LEFT]:
+                    game_state.player_ship.rotate(clockwise=False)
+                if is_key_pressed[pygame.K_UP]:
+                    game_state.player_ship.accelerate(acceleration_factor=0.5)
+                elif is_key_pressed[pygame.K_DOWN]:
+                    game_state.player_ship.deccelerate(deceleration_factor=0.5)
+
+            if game_state.message:
+                if (
+                    is_key_pressed[pygame.K_KP_ENTER]
+                    or is_key_pressed[pygame.K_RETURN]
+                ):
+                    game_state.__init__()
+        else:
             if not game_state.message:
                 print("HERE HERE HERE")
                 if (
@@ -96,9 +115,9 @@ class ArrowController(CaptainForeverController):
                 ):
                     print("DECEL")
                     game_state.player_ship.deccelerate(deceleration_factor=0.5)
+
             else:
-                if (
-                    event.type == pygame.KEYDOWN and
+                if event.type == pygame.KEYDOWN and (
                     event.key == pygame.K_KP_ENTER
                     or event.key == pygame.K_RETURN
                 ):

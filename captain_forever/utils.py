@@ -5,8 +5,12 @@ from pygame.math import Vector2
 
 
 # stores horizontal and vertical dimensions of pngs that need to be scaled
-dimensions = {"ship": (50, 50), "space_background": (
-    1000, 800), "fire": (100, 100), "background": (1082, 720)}
+dimensions = {
+    "ship": (50, 50),
+    "space_background": (1000, 800),
+    "fire": (100, 100),
+    "background": (1082, 720),
+}
 
 
 def load_sprite(name, with_alpha=True, with_scaling=False):
@@ -22,7 +26,8 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     loaded_sprite = load(f"../assets/sprites/{name}.png")
     if name in dimensions and with_scaling == True:
         loaded_sprite = scale(
-            loaded_sprite, (dimensions[name][0], dimensions[name][1]))
+            loaded_sprite, (dimensions[name][0], dimensions[name][1])
+        )
     if with_alpha:
         return loaded_sprite.convert_alpha()
     else:
@@ -61,8 +66,8 @@ def get_random_position(surface):
         random_position: Vector2 2 item position vector, random pos
     """
     return Vector2(
-        random.randrange(surface.get_width()), random.randrange(
-            surface.get_height())
+        random.randrange(surface.get_width()),
+        random.randrange(surface.get_height()),
     )
 
 
