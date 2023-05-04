@@ -3,12 +3,16 @@ import unittest
 from unittest.mock import MagicMock
 from pygame import Surface
 from pygame.font import SysFont
-from utils import load_sprite, wrap_position, get_random_position, get_random_velocity
+from utils import (
+    load_sprite,
+    wrap_position,
+    get_random_position,
+    get_random_velocity,
+)
 from view import print_text
 
 
 class TestMyModule(unittest.TestCase):
-
     def setUp(self):
         pygame.init()
         self.screen = pygame.display.set_mode((1082, 720))
@@ -20,8 +24,9 @@ class TestMyModule(unittest.TestCase):
         self.assertIsNotNone(sprite)
 
         # Test loading a sprite without alpha and with scaling
-        sprite = load_sprite("space_background",
-                             with_alpha=False, with_scaling=True)
+        sprite = load_sprite(
+            "space_background", with_alpha=False, with_scaling=True
+        )
         self.assertIsNotNone(sprite)
 
     # def test_load_sound(self):
@@ -89,5 +94,5 @@ class TestMyModule(unittest.TestCase):
         surface.blit.assert_called()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
