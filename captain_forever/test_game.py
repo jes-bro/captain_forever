@@ -98,3 +98,4 @@ def test_process_game_logic(game_objects, expected_result):
         assert test_game.message_flag == "won"
     else:
         raise ValueError(f"Invalid expected_result: {expected_result}")
+
