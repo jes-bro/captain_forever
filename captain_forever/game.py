@@ -184,7 +184,7 @@ class CaptainForever:
         Return all game objects that have not been destroyed.
 
         Returns:
-            game_objects: list of all game objects as class instances
+            game_objects: List of all game objects as class instances.
         """
         game_objects = [
             *self._npc_ships,
