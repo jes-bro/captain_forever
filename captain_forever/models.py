@@ -262,6 +262,7 @@ class NPCShip(Ship):
         else:
             self.velocity = Vector2(0)
             self.shoot()
+            self.method_flag = 8
             if dirvect.magnitude() > 300:
                 self.velocity = dirvect.normalize() * 2
             if dirvect.magnitude() < 150:
