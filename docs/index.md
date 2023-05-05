@@ -19,11 +19,11 @@ Once the game is over, you can restart using the enter key or exit the game with
 
 ### Demo Video
 
-Here is the link to the video demo of the game: https://youtu.be/wVo04BFmMro
+Here is the [link](https://youtu.be/wVo04BFmMro) to our game demo on YouTube.
 
 ## Necessary Packages, Installation & Startup
 
-Here is the README.MD file that specify the installation instruction: https://github.com/olincollege/captain_forever/blob/main/README.md
+Here is the [README]( https://github.com/olincollege/captain_forever/blob/main/README.md) file that specifies our installation instructions.
 
 
 ## About the Authors
