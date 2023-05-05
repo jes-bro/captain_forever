@@ -2,7 +2,6 @@
 import pygame
 import unittest
 from unittest.mock import MagicMock
-from pygame.font import SysFont
 from utils import (
     load_sprite,
     wrap_position,

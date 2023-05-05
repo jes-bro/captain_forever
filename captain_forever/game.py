@@ -1,5 +1,4 @@
 # pylint: disable=no-member
-import pygame
 from utils import load_sprite, get_random_position
 from models import Ship, NPCShip, StaticObject
 
@@ -33,6 +32,7 @@ class CaptainForever:
             _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
             _message_flag: String, tells you if you have won or lost the game.
             _message_displayed: Bool, reps whether message has been displayed or not.
+            _message: A string representing the message to be displayed at end.
         """
         self._message = ""
         self._fires = []
@@ -64,10 +64,22 @@ class CaptainForever:
 
     @property
     def message(self):
+        """
+        Return _message.
+
+        Returns: 
+            _message: A string representing the message to be displayed at end.
+        """
         return self._message
 
     @property
     def fires(self):
+        """
+        Return _fires.
+
+        Returns:
+            _fires: List, elements are StaticObject instances.
+        """
         return self._fires
 
     @property

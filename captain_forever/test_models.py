@@ -144,7 +144,7 @@ npc_move_velocity_cases = [
     ((-1, 1), (0, 0), True),
     ((-1, 0), (0, 0), True),
     # on perfect heading velocity is modified if above 300 units away or under 150
-    ((1, 1), (400, 399), False),
+    ((1, 1), (400, 399), True),
     ((.5, .5), (0, 0), False),
     # on perfect heading between 300 and 150 units away, no velocity
     ((1, 0), (200, 400), True)

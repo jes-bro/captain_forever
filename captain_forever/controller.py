@@ -4,7 +4,6 @@ Captain Forever controller.
 """
 import pygame
 from abc import ABC, abstractmethod
-from models import Ship
 
 
 class CaptainForeverController(ABC):
@@ -82,7 +81,6 @@ class ArrowController(CaptainForeverController):
 
         if not testing and game_state.is_running:
             is_key_pressed = pygame.key.get_pressed()
-
             if not game_state.message_displayed:
                 if is_key_pressed[pygame.K_RIGHT]:
                     game_state.player_ship.rotate(clockwise=True)
@@ -92,37 +90,3 @@ class ArrowController(CaptainForeverController):
                     game_state.player_ship.accelerate(acceleration_factor=0.5)
                 elif is_key_pressed[pygame.K_DOWN]:
                     game_state.player_ship.deccelerate(deceleration_factor=0.5)
-
-        elif testing:
-            if not game_state.message_displayed:
-                if (
-                    game_state.player_ship
-                    and event.type == pygame.KEYDOWN
-                    and event.key == pygame.K_RIGHT
-                ):
-                    game_state.player_ship.rotate(clockwise=True)
-                elif (
-                    game_state.player_ship
-                    and event.type == pygame.KEYDOWN
-                    and event.key == pygame.K_LEFT
-                ):
-                    game_state.player_ship.rotate(clockwise=False)
-                if (
-                    game_state.player_ship
-                    and event.type == pygame.KEYDOWN
-                    and event.key == pygame.K_UP
-                ):
-                    game_state.player_ship.accelerate(acceleration_factor=0.5)
-                elif (
-                    game_state.player_ship
-                    and event.type == pygame.KEYDOWN
-                    and event.key == pygame.K_DOWN
-                ):
-                    game_state.player_ship.deccelerate(deceleration_factor=0.5)
-
-            else:
-                if event.type == pygame.KEYDOWN and (
-                    event.key == pygame.K_KP_ENTER
-                    or event.key == pygame.K_RETURN
-                ):
-                    game_state.__init__(self._width, self._height)
