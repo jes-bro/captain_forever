@@ -107,7 +107,6 @@ class GameObject:
         Move game objects and wrap surface-exiting objects back onto surface.
 
         Args:
-            surface: pygame surface, surface on which object will be drawn.
             width: Int, represents width of screen.
             height: Int, represents height of screen.
         """
@@ -290,6 +289,18 @@ class Ship(GameObject):
 class NPCShip(Ship):
     """
     Define ship controlled by the computer.
+    
+    Attributes:
+        _shooting_delay: Int, represents amt of time to wait before shotting
+        player.
+        _direction: Vector2, x and y vector that shows orientation of sprite.
+        _health: Int, number of hits before the ship will die.
+        _create_bullet_callback: Function, function to add bullets to list to be processed.
+        _position: Vector2, x and y position on the screen.
+        _sprite: Pygame surface, image with some width and height.
+        _radius: int, radius of the sprite.
+        _velocity: Vector2, rate of change in x and y of the sprite.
+        _method_flag: Int, used to identify which function was called during testing.
     """
 
     BULLET_DELAY = 1
@@ -303,18 +314,6 @@ class NPCShip(Ship):
             name: String, name of png corresponding to object.
             create_bullet_callback: Function, function to add bullets
             to list to be processed.
-
-        Attributes:
-            _shooting_delay: Int, represents amt of time to wait before shotting
-            player.
-            _direction: Vector2, x and y vector that shows orientation of sprite.
-            _health: Int, number of hits before the ship will die.
-            _create_bullet_callback: Function, function to add bullets to list to be processed.
-            _position: Vector2, x and y position on the screen.
-            _sprite: Pygame surface, image with some width and height.
-            _radius: int, radius of the sprite.
-            _velocity: Vector2, rate of change in x and y of the sprite.
-            _method_flag: Int, used to identify which function was called during testing.
         """
         self._position = position
         super().__init__(
