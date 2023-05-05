@@ -44,7 +44,7 @@ class CaptainForeverView(ABC):
     @abstractmethod
     def draw(self):
         """
-        Display the board.
+        Display the game.
         """
 
 
