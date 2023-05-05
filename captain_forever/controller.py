@@ -16,6 +16,8 @@ class CaptainForeverController(ABC):
     Attributes:
         _game: An instance of the Captain Forever game
         class.
+        _width: Int, representing width of the screen.
+        _height: Int, representing height of the screen.
     """
 
     # Define your methods here.
@@ -26,6 +28,8 @@ class CaptainForeverController(ABC):
         Args:
             game: An instance of the captain forever class
             that gives the state of the game.
+            width: Int, representing width of the screen.
+            height: Int, representing height of the screen.
         """
         self._game = game
         self._width = width
@@ -34,8 +38,9 @@ class CaptainForeverController(ABC):
     @property
     def game(self):
         """
-        Return the state of the internal board
-        _game attribute.
+        Return _game.
+
+        Returns: _game, the state of the game.
         """
         return self._game
 
@@ -55,9 +60,6 @@ class ArrowController(CaptainForeverController):
     def maneuver_player_ship(self):
         """
         Move the player ship based on user input.
-
-        Args:
-            testing: Bool, represents whether unit testing or not.
         """
         game_state = self.game
         for event in pygame.event.get():

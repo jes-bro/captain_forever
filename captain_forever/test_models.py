@@ -232,13 +232,11 @@ def test_object_init_cases(attribute, attribute_type):
 @pytest.mark.parametrize("collider, collision_bool", GameObject_collide_cases)
 def test_collide_cases(collider, collision_bool):
     """
-    Check if the key press to move results in the correct action.
-
-    If the arrow keys are pressed down, call the move method in the ship class.
+    Check if collisions are detected with the collides_with method.
 
     Args:
-        attribute: An attribute of the game instance.
-        attribute_type: The type of the attribute.
+        collider: Game object, that test object is colliding with.
+        collision_bool: Boolean indicating whether or not collision occured.
     """
     # Check if attribute is of the correct type.
     assert test_object.collides_with(collider) == collision_bool
@@ -251,7 +249,7 @@ def test_move_cases(velocity, distance_change):
 
     Args:
         velocity: Vector2 of x and y pixels that object should move on move method.
-        distance_change: expected magnitude (number of pixels) of that move.
+        distance_change: Int, expected magnitude (number of pixels) of that move.
     """
     original_position = test_object.position
     test_object._velocity = velocity
@@ -284,11 +282,11 @@ def test_ship_rotate_degrees_cases(clockwise_bool, expected_change):
     """
     Check if Ship rotation method is modifying direction by the right angle.
 
-    Vector2 direction should  change by  expected_change degrees.
+    Vector2 direction should change by expected_change degrees.
 
     Args:
-        clockwise_bool: bool, tells the rotation whether it is clockwise.
-        expected_change: int, number of degrees the rotation is expected to be.
+        clockwise_bool: Bool, tells the rotation whether it is clockwise.
+        expected_change: Int, number of degrees the rotation is expected to be.
     """
     test_game.test_ship._direction = Vector2(0, -1)
     test_game.test_ship.rotate(clockwise_bool)
@@ -310,9 +308,9 @@ def test_ship_accelerate_decellerate_cases(acceleration_value, expected_change):
     Vector2 attributes of velocity should change by the ACCELERATION factor.
 
     Args:
-        acceleration_value: int, number to multiply ACCELERATION by to accelerate.
+        acceleration_value: Int, number to multiply ACCELERATION by to accelerate.
         If negative, calls decellerate.
-        expected_change: float, expected difference in magnitude between original
+        expected_change: Float, expected difference in magnitude between original
         and new velocity vector.
     """
     test_game.test_ship._velocity = Vector2(0)
@@ -338,8 +336,8 @@ def test_ship_reduce_health_cases(times_to_reduce, expected_health):
     private property _health.
 
     Args:
-        times_to_reduce: int, number of times to reduce the player health by 1.
-        expected_health: int, health expected after number of reductions (starts at 3).
+        times_to_reduce: Int, number of times to reduce the player health by 1.
+        expected_health: Int, health expected after number of reductions (starts at 3).
     """
     test_game.test_ship._health = 3
     for _ in range(times_to_reduce):
@@ -357,8 +355,8 @@ def test_ship_shoot_cases(times_to_shoot, number_of_bullets):
     The length of the test_game.bullets list should be equal to the number of times shoot called.
 
     Args:
-        times_to_shoot: int, number of times the player ship shoots a bullet.
-        number_of_bullets: int, new bullets in the bullets list.
+        times_to_shoot: Int, number of times the player ship shoots a bullet.
+        number_of_bullets: Int, new bullets in the bullets list.
     """
     starting_bullets = len(test_game.bullets)
     for _ in range(times_to_shoot):
@@ -380,8 +378,8 @@ def test_npc_move_shoot_cases(heading, shots):
     the player ship.
 
     Args:
-        heading: tuple, vector of the heading of an NPC, (1, 1) is towards the player.
-        shots: int, new bullets in list. Should be 1 for cases where NPC should shoot.
+        heading: Tuple, vector of the heading of an NPC, (1, 1) is towards the player.
+        shots: Int, new bullets in list. Should be 1 for cases where NPC should shoot.
     """
     starting_bullets = len(test_game.npc_bullets)
     test_game.npc_ship = NPCShip(
@@ -408,8 +406,8 @@ def test_npc_move_rotate_cases(heading, move_flag):
     DIRECTLY towards the player ship.
 
     Args:
-        heading: tuple, vector of the heading of an NPC, (1, 1) is towards the player.
-        direction_change: bool, whether direction vector is the same as it started.
+        heading: Tuple, vector of the heading of an NPC, (1, 1) is towards the player.
+        move_flag: Int, representing flag that indicates a particular function.
     """
     test_game.npc_ship = NPCShip(
         Vector2(0), "ship", test_game.npc_bullets.append
@@ -433,8 +431,9 @@ def test_npc_move_velocity_cases(heading, npc_position, velocity_change):
     (0, 0) with a direction (heading) of (1, 1) is pointed DIRECTLY towards the player ship.
 
     Args:
-        heading: tuple, vector of the heading of an NPC, (1, 1) is towards the player.
-        velocity_change: bool, whether direction vector is the same as it started.
+        heading: Tuple, vector of the heading of an NPC, (1, 1) is towards the player.
+        npc_position: Vector2, representing position of NPC.
+        velocity_change: Bool, whether direction vector is the same as it started.
     """
     test_game.npc_ship = NPCShip(
         Vector2(0), "ship", test_game.npc_bullets.append

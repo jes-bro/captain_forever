@@ -21,12 +21,12 @@ dimensions = {
 
 def load_sprite(name, with_alpha=True, with_scaling=False):
     """
-    loads a sprite from assets/sprites to a surface with or without alpha
+    Load a sprite onto the PyGame surface.
 
-    inputs:
-        horizontal_dim: int, pix width
-        verical_dim: int, pix height
-        with_alpha: bool, whether to convert image for faster processing
+    Args:   
+        name: String, representing name of png to load.
+        with_alpha: Bool, whether to make image transparent.
+        with_scaling: Bool, represents whether image should be scald.
     """
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
     loaded_sprite = load(f"../assets/sprites/{name}.png")
@@ -39,21 +39,12 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     return loaded_sprite.convert()
 
 
-# def load_sound(name):
-#     """
-#     loads a sound from sound assets by its name
-#     """
-#     path = f"../assets/sounds/{name}.mp3"
-#     # return Sound(path)
-
-
 def wrap_position(position, width, height):
     """
-    re-maps coordinates off of a surface's size back to real points
+    Re-map coordinates off of a surface's size back to real points.
 
-    inputs:
-        position: tuple of ints, position on the surface (0, 0 is top left)
-        surface: pygame surface, typically the display surface
+    Args:
+        position: Tuple of ints, position on the surface (0, 0 is top left)
         width: Int, represents width of screen.
         height: Int, represents height of screen.
     """
@@ -63,13 +54,14 @@ def wrap_position(position, width, height):
 
 def get_random_position(width, height):
     """
-    returns a random position within a surface
+    Returns a vector pointing in a random direction.
 
-    inputs:
-        surface: pygame surface, coordinates will be within maximum bounds
+    Args:
+        width: Int, represents width of screen.
+        height: Int, represents height of screen.
 
-    returns:
-        random_position: Vector2 2 item position vector, random pos
+    Returns:
+        Vector2 2 item position vector, at a random position.
     """
     return Vector2(
         random.randrange(width),
@@ -79,11 +71,11 @@ def get_random_position(width, height):
 
 def get_random_velocity(min_speed, max_speed):
     """
-    generates a randomly oriented vector with magnitude between min and max speed
+    Generates a randomly oriented vector with magnitude between min and max speed.
 
-    inputs:
-        min_speed: int, min speed (magnitude of velocity) in pix/second
-        max_speed: int, max speed (magnitude of velocity) in pix/second
+    Args:
+        min_speed: Int, min speed (magnitude of velocity) in pix/second.
+        max_speed: Int, max speed (magnitude of velocity) in pix/second.
     """
     speed = random.randint(min_speed, max_speed)
     angle = random.randrange(0, 360)

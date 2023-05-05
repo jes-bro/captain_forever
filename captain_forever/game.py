@@ -15,7 +15,14 @@ class CaptainForever:
 
     Attributes:
         counter: Int, counter that helps delay when fire disappears.
-        is_quitting: Bool, represents whether game is quitting or not.
+        _fires: List, elements are StaticObject instances.
+        _npc_ships: List, elements are NPCShip instances.
+        _npc_bullets: List, elements are Bullet instances from NPCShip instances.
+        _bullets: List, elements are Bullet instances from player_ship.
+        _player_ship: Ship instance representing player that responds to input.
+        _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
+        _message_flag: String, tells you if you have won or lost the game.
+        _message: A string representing the message to be displayed at end.
     """
 
     ENEMY_SPAWN_DISTANCE = 400
@@ -27,16 +34,6 @@ class CaptainForever:
         Args:
             width: Int, represents width of screen.
             height: Int, represents height of screen.
-
-        Attributes:
-            _fires: List, elements are StaticObject instances.
-            _npc_ships: List, elements are NPCShip instances.
-            _npc_bullets: List, elements are Bullet instances from NPCShip instances.
-            _bullets: List, elements are Bullet instances from player_ship.
-            _player_ship: Ship instance representing player that responds to input.
-            _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
-            _message_flag: String, tells you if you have won or lost the game.
-            _message: A string representing the message to be displayed at end.
         """
         self._message = ""
         self._fires = []
@@ -281,10 +278,6 @@ class CaptainForever:
     def _end_game_message(self):
         """
         Create the game _message and indicate whether the player won or lost.
-
-        Args:
-            won_lost_str: string "won" or "lost" to modify the end game _message
-                Other strings error.
         """
         self._message = (
             f"You {self._message_flag}! \n To exit, press escape \n To start a"
