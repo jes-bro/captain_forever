@@ -33,6 +33,8 @@ We are Jess, Rajiv and Muya! What inspired us to create this game was to rekindl
 
 This game would not have been possible without the open-source Pygame library. It is used to process sprites, physics, and all other aspects of gameplay in this implementation. 
 
+We also benefited a lot from the following [Real Python Tutorial](https://realpython.com/asteroids-game-python/), using it to help enhance our understanding of PyGame and asteroids-style games in general.
+
 Our implementation of Captain Forever is inspired by classic arcade video games "Captain Forever' and "Asteroids". 
 
 The original "Captain Forever" was a multidirectional shooter video game designed by developer Jarred "Farbs" Woods in 2009, which was inspired by two other games called "Warning Forever" and "Battleships Forever". This was the original inspiration for our game
