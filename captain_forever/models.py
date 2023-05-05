@@ -121,6 +121,9 @@ class GameObject:
 
         Args:
             other_obj: class instance inherited from GameObject with radius attribute
+
+        Returns:
+            Bool representing whether the objects are colliding or not.
         """
         distance = self._position.distance_to(other_obj.position)
         return distance < self._radius + other_obj.radius
@@ -154,7 +157,7 @@ class StaticObject(GameObject):
 
 class Ship(GameObject):
     """
-    Class for player and npc ship instances
+    Class for player and NPCShip instances.
 
     Constants:
         MANEUVERABILITY: Int, degrees per second a ship can turn.
@@ -278,17 +281,15 @@ class Ship(GameObject):
     def get_health(self):
         """
         Return the health of ship.
+
+        Returns: _health, int representing health of ship.
         """
         return self._health
 
 
 class NPCShip(Ship):
     """
-    Ship controlled by the computer.
-
-    Methods:
-        move:
-        shoot:
+    Define ship controlled by the computer.
     """
 
     BULLET_DELAY = 1
@@ -365,7 +366,7 @@ class NPCShip(Ship):
 
     def shoot(self):
         """
-        Creates a bullet shooting in the direction of the ship from its position.
+        Create a bullet shooting in the direction of the ship from its position.
         """
         self._shooting_delay += 9
         if self._shooting_delay > 1000 * self.BULLET_DELAY:
