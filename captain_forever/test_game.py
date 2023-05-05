@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """
 Test the ArrowController class to respond appropriately to key inputs.
 """

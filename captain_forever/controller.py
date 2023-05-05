@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """
 Captain Forever controller.
 """
@@ -17,7 +18,7 @@ class CaptainForeverController(ABC):
     """
 
     # Define your methods here.
-    def __init__(self, game):
+    def __init__(self, game, width, height):
         """
         Initialize CaptainForeverController.
 
@@ -26,6 +27,8 @@ class CaptainForeverController(ABC):
             that gives the state of the game.
         """
         self._game = game
+        self._width = width
+        self._height = height
 
     @property
     def game(self):
@@ -51,9 +54,11 @@ class ArrowController(CaptainForeverController):
     def maneuver_player_ship(self, testing=False):
         """
         Move the player ship based on user input.
+
+        Args:
+            testing: Bool, represents whether unit testing or not.
         """
         game_state = self.game
-        print(f"GAMESTATE MESSAGE: {game_state._message}")
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
                 event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
@@ -67,10 +72,18 @@ class ArrowController(CaptainForeverController):
                 and game_state.is_running
             ):
                 game_state.player_ship.shoot()
+
+            elif event.type == pygame.KEYDOWN and (
+                event.key == pygame.K_KP_ENTER
+                or event.key == pygame.K_RETURN
+                and not game_state.is_running
+            ):
+                game_state.__init__(self._width, self._height)
+
         if not testing and game_state.is_running:
             is_key_pressed = pygame.key.get_pressed()
 
-            if not game_state.message:
+            if not game_state.message_displayed:
                 if is_key_pressed[pygame.K_RIGHT]:
                     game_state.player_ship.rotate(clockwise=True)
                 elif is_key_pressed[pygame.K_LEFT]:
@@ -80,42 +93,31 @@ class ArrowController(CaptainForeverController):
                 elif is_key_pressed[pygame.K_DOWN]:
                     game_state.player_ship.deccelerate(deceleration_factor=0.5)
 
-            if game_state.message:
-                if (
-                    is_key_pressed[pygame.K_KP_ENTER]
-                    or is_key_pressed[pygame.K_RETURN]
-                ):
-                    game_state.__init__()
         elif testing:
-            if not game_state.message:
-                print("HERE HERE HERE")
+            if not game_state.message_displayed:
                 if (
                     game_state.player_ship
                     and event.type == pygame.KEYDOWN
                     and event.key == pygame.K_RIGHT
                 ):
-                    print("CW ROTATE")
                     game_state.player_ship.rotate(clockwise=True)
                 elif (
                     game_state.player_ship
                     and event.type == pygame.KEYDOWN
                     and event.key == pygame.K_LEFT
                 ):
-                    print("CCW ROTATE")
                     game_state.player_ship.rotate(clockwise=False)
                 if (
                     game_state.player_ship
                     and event.type == pygame.KEYDOWN
                     and event.key == pygame.K_UP
                 ):
-                    print("ACCEL")
                     game_state.player_ship.accelerate(acceleration_factor=0.5)
                 elif (
                     game_state.player_ship
                     and event.type == pygame.KEYDOWN
                     and event.key == pygame.K_DOWN
                 ):
-                    print("DECEL")
                     game_state.player_ship.deccelerate(deceleration_factor=0.5)
 
             else:
@@ -123,4 +125,4 @@ class ArrowController(CaptainForeverController):
                     event.key == pygame.K_KP_ENTER
                     or event.key == pygame.K_RETURN
                 ):
-                    game_state.__init__()
+                    game_state.__init__(self._width, self._height)

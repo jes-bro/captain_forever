@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """
 Tic-tac-toe game view.
 """

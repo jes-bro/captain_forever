@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """Module for testing the print_text function in the view module."""
 
 import pytest

@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom

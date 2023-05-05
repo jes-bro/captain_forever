@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 """
 Utility functions that support gameplay.
 """

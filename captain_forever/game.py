@@ -1,3 +1,4 @@
+# pylint: disable=no-member
 import pygame
 from utils import load_sprite, get_random_position
 from models import Ship, NPCShip, StaticObject
@@ -31,6 +32,7 @@ class CaptainForever:
             _player_ship: Ship instance representing player that responds to input.
             _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
             _message_flag: String, tells you if you have won or lost the game.
+            _message_displayed: Bool, reps whether message has been displayed or not.
         """
         self._message = ""
         self._fires = []
@@ -45,6 +47,7 @@ class CaptainForever:
         self._height = height
         self._enemy_spawn_counter = 0
         self._message_flag = ""
+        self._message_displayed = False
         self.is_quitting = False
         for _ in range(3):
             while True:
@@ -99,6 +102,10 @@ class CaptainForever:
     def height(self):
         return self.height
 
+    @property
+    def message_displayed(self):
+        return self._message_displayed
+
     def main_loop(self, controller, view):
         while True:
             controller.maneuver_player_ship()
@@ -147,6 +154,7 @@ class CaptainForever:
                         self.player_ship.position, "fire"
                     )
                     self._message_flag = "lost"
+                    self._message_displayed = True
                     self._end_game_message()
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
@@ -188,10 +196,12 @@ class CaptainForever:
                         self.player_ship.position, "fire"
                     )
                     self._message_flag = "lost"
+                    self._message_displayed = True
                     self._end_game_message()
 
         if not self._npc_ships and self.player_ship:
             self._message_flag = "won"
+            self._message_displayed = True
             self._end_game_message()
 
     def _end_game_message(self):
