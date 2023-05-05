@@ -1,12 +1,10 @@
 import pygame
 from pygame.math import Vector2
-from pygame import Color
 from pygame.transform import rotozoom
 from utils import (
-    get_random_velocity,
     load_sprite,
     wrap_position,
-)  # , load_sound
+)
 from pygame.locals import *
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)

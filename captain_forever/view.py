@@ -46,20 +46,24 @@ class CaptainForeverView(ABC):
 class PyGameView(CaptainForeverView):
     """
     Display the game elements using Pygame.
-
-    Attributes:
-        clock: PyGame clock instance, tracks game time.
-        screen: PyGame surface display instance, surface to draw game objects.
-        background: PyGame surface, background of game drawn each frame.
-        font: PyGame font instance, controls font of endgame message.
     """
 
     def __init__(self, game, screen):
+        """
+        Initialize the PyGame Display. 
+
+        Attributes:
+            _clock: PyGame clock instance, tracks game time.
+            _screen: PyGame surface display instance, surface to draw game
+            objects.
+            _background: PyGame surface, background of game drawn each frame.
+            _font: PyGame font instance, controls font of endgame message.
+        """
         super().__init__(game)
-        self.screen = screen
-        self.background = load_sprite("background", False, True)
+        self._screen = screen
+        self._background = load_sprite("background", False, True)
         self._clock = pygame.time.Clock()
-        self.font = pygame.font.Font(None, 64)
+        self._font = pygame.font.Font(None, 64)
 
     def draw(self):
         """
@@ -69,12 +73,12 @@ class PyGameView(CaptainForeverView):
         game.counter += 1
         if game.counter % 50 == 0 and game.fires:
             game.fires.pop()
-        self.screen.blit(self.background, (0, 0))
-        for game_object in game._get_game_objects():
-            game_object.draw(self.screen)
+        self._screen.blit(self._background, (0, 0))
+        for game_object in game.get_game_objects():
+            game_object.draw(self._screen)
 
         if game.message:
-            print_text(self.screen, game.message, self.font)
+            print_text(self._screen, game.message, self._font)
 
         pygame.display.flip()
         self._clock.tick(60)

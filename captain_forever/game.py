@@ -102,7 +102,7 @@ class CaptainForever:
             self._process_game_logic()
             view.draw()
 
-    def _get_game_objects(self):
+    def get_game_objects(self):
         """
         Return all game objects that have not been destroyed.
 
@@ -125,7 +125,7 @@ class CaptainForever:
         Process movement, collisions, and game state on non-destroyed game objects.
         """
         if not self._message:
-            for game_object in self._get_game_objects():
+            for game_object in self.get_game_objects():
                 if (
                     game_object in self._npc_ships
                 ):  # or game_object in self._fires:
