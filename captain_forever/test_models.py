@@ -170,7 +170,7 @@ ship_shoot_cases = [
 ]
 
 # NPC ship test cases
-# keep in mind for these tests that the test_game.test_ship (player ship) is at (400, 400)
+# for these tests that the test_game.test_ship (player ship) is at (400, 400)
 # so a ship at (0, 0) with a direction (heading) of (1, 1) is pointed DIRECTLY towards the
 # player ship.
 npc_move_shoot_cases = [
