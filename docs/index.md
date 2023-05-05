@@ -1,4 +1,4 @@
-# Welcome to Captain Forever!
+# Welcome to Captain Forever! 
 
 ## The goal
 Captain Forever is an exhilarating spaceship adventure game that transports you, the captain, into the role of an interstellar pilot being pursued by a fleet of formidable enemy ships. In the midst of a cosmic field, you’ll navigate a single ship through formations of enemies that periodically cross your path. If you stay still too long, the enemies will lock on to your position and overwhelm you with their canons! You must return fire all while avoiding collisions and dodging counter-fire to survive. If you get hit by the enemies three times you will explode, but if you can destroy the pursuing fleet before reinforcements arrive you win!
@@ -19,11 +19,11 @@ Once the game is over, you can restart using the enter key or exit the game with
 
 ### Demo Video
 
-Here is the link to the video demo of the game: https://youtu.be/wVo04BFmMro
+Here is the [link](https://youtu.be/wVo04BFmMro) to our game demo on YouTube.
 
 ## Necessary Packages, Installation & Startup
 
-Here is the README.MD file that specify the installation instruction: https://github.com/olincollege/captain_forever/blob/main/README.md
+Here is the [README]( https://github.com/olincollege/captain_forever/blob/main/README.md) file that specifies our installation instructions.
 
 
 ## About the Authors
@@ -32,6 +32,8 @@ We are Jess, Rajiv and Muya! What inspired us to create this game was to rekindl
 ## Attributions 
 
 This game would not have been possible without the open-source Pygame library. It is used to process sprites, physics, and all other aspects of gameplay in this implementation. 
+
+We also benefited a lot from the following [Real Python Tutorial](https://realpython.com/asteroids-game-python/), using it to help enhance our understanding of PyGame and asteroids-style games in general.
 
 Our implementation of Captain Forever is inspired by classic arcade video games "Captain Forever' and "Asteroids". 
 
