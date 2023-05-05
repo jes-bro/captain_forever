@@ -2,7 +2,7 @@
 # pylint: disable=no-name-in-module
 # Disabling pylint warnings related to PyGame that aren't valid
 """
-Tic-tac-toe game view.
+Define Captain Forever view class.
 """
 from abc import ABC, abstractmethod
 import pygame
@@ -13,14 +13,13 @@ from utils import load_sprite
 
 class CaptainForeverView(ABC):
     """
-    Display the board.
+    Display the game.
 
     Attributes:
         _game: An instance of the captain forever
         game's state.
     """
 
-    # Define your methods here.
     def __init__(self, game):
         """
         Initialize CaptainForeverView instance.
@@ -34,8 +33,11 @@ class CaptainForeverView(ABC):
     @property
     def game(self):
         """
-        Return the state of the internal board (TicTacToeBoard)
-        attribute.
+        Return _game.
+        
+        Returns: 
+            _game: An instance of CaptainForever with
+            current game state.
         """
         return self._game
 
