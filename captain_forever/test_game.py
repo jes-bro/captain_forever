@@ -71,7 +71,6 @@ test_cases = [
         ],
         "won",
     ),  # expected result
-    # ... additional test cases ...
 ]
 
 
