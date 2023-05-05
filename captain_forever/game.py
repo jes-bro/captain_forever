@@ -42,6 +42,7 @@ class CaptainForever:
         self._height = height
         self._enemy_spawn_counter = 0
         self._message_flag = ""
+        self.is_quitting = False
         for _ in range(3):
             while True:
                 position = get_random_position(width, height)
@@ -86,6 +87,14 @@ class CaptainForever:
     @property
     def is_running(self):
         return isinstance(self.player_ship, Ship)
+
+    @property
+    def width(self):
+        return self._width
+
+    @property
+    def height(self):
+        return self.height
 
     def main_loop(self, controller, view):
         while True:
@@ -178,7 +187,7 @@ class CaptainForever:
                     self._message_flag = "lost"
                     self._end_game_message()
 
-        if not self._npc_ships and self.player_ship and self.is_running:
+        if not self._npc_ships and self.player_ship:
             self._message_flag = "won"
             self._end_game_message()
 

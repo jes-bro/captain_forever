@@ -9,8 +9,11 @@ from game import CaptainForever
 from models import Bullet, Ship, GameObject, NPCShip, StaticObject
 from utils import load_sprite
 
-test_game = CaptainForever()
-surface = test_game.screen
+pygame.init()
+width = 1082
+height = 720
+surface = pygame.display.set_mode((width, height))
+test_game = CaptainForever(width, height)
 test_object = GameObject(
     Vector2(0), load_sprite("ship", True, True), Vector2(0))
 
@@ -139,7 +142,7 @@ def test_move_cases(velocity, distance_change):
     """
     original_position = test_object.position
     test_object.velocity = velocity
-    test_object.move(surface)
+    test_object.move(width, height)
     new_position = test_object.position
 
     assert original_position.distance_to(new_position) == distance_change

@@ -53,11 +53,12 @@ class ArrowController(CaptainForeverController):
         Move the player ship based on user input.
         """
         game_state = self.game
-        print(f"GAMESTATE MESSAGE: {game_state.message}")
+        print(f"GAMESTATE MESSAGE: {game_state._message}")
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
                 event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
             ):
+                game_state.is_quitting = True
                 quit()
             elif (
                 game_state.player_ship
