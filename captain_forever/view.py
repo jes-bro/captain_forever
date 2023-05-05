@@ -34,8 +34,8 @@ class CaptainForeverView(ABC):
     def game(self):
         """
         Return _game.
-        
-        Returns: 
+
+        Returns:
             _game: An instance of CaptainForever with
             current game state.
         """

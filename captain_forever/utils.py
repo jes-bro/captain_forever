@@ -27,7 +27,7 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
         name: String, representing name of png to load.
         with_alpha: Bool, whether to make image transparent.
         with_scaling: Bool, represents whether image should be scald.
-        
+
     Returns:
         A sprite with properties corresponding to arguments.
     """
@@ -50,7 +50,7 @@ def wrap_position(position, width, height):
         position: Tuple of ints, position on the surface (0, 0 is top left)
         width: Int, represents width of screen.
         height: Int, represents height of screen.
-        
+
     Returns:
         A Vector2 that's within the confines of the screen.
     """
@@ -82,7 +82,7 @@ def get_random_velocity(min_speed, max_speed):
     Args:
         min_speed: Int, min speed (magnitude of velocity) in pix/second.
         max_speed: Int, max speed (magnitude of velocity) in pix/second.
-        
+
     Returns:
         A Vector2 that has been randomly generated.
     """

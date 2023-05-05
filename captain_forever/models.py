@@ -289,7 +289,7 @@ class Ship(GameObject):
 class NPCShip(Ship):
     """
     Define ship controlled by the computer.
-    
+
     Attributes:
         _shooting_delay: Int, represents amt of time to wait before shotting
         player.
