@@ -6,7 +6,11 @@ import pygame as pg
 from game import CaptainForever
 from controller import ArrowController
 
-test_game = CaptainForever()
+pg.init()
+width = 1082
+height = 720
+screen = pg.display.set_mode((width, height))
+test_game = CaptainForever(1082, 720)
 test_player = test_game.player_ship
 test_player_controller = ArrowController(test_game)
 
@@ -28,8 +32,8 @@ player_rotate_cases = [
 
 quit_case = [
     # Check if game is quit.
-    (pg.event.Event(pg.QUIT), False),
-    (pg.event.Event(pg.KEYDOWN, key=pg.K_ESCAPE), False),
+    (pg.event.Event(pg.QUIT), True),
+    (pg.event.Event(pg.KEYDOWN, key=pg.K_ESCAPE), True),
 ]
 
 restart_case = [
@@ -51,7 +55,7 @@ def test_player_translate_cases(pygame_event, translate_flag):
         flag_value: An integer indicating which Player method has been called.
     """
     # Simulate key press.
-    test_player_controller.game.message = False
+    test_player_controller.game._message = False
     pg.event.post(pygame_event)  # add the event to the queue
 
     # Check if correct method is called.
@@ -71,7 +75,7 @@ def test_player_rotate_cases(pygame_event, rotate_flag):
         flag_value: An integer indicating which Player method has been called.
     """
     # Simulate key press.
-    test_player_controller.game.message = False
+    test_player_controller.game._message = False
     pg.event.post(pygame_event)  # add the event to the queue
 
     # Check if correct method is called.
@@ -99,8 +103,8 @@ def test_player_shooting_cases(pygame_event, shoot_flag_val):
     assert test_player_controller.game.player_ship.method_flag == shoot_flag_val
 
 
-@pytest.mark.parametrize("pygame_event, is_running", quit_case)
-def test_quit_case(pygame_event, is_running):
+@pytest.mark.parametrize("pygame_event, is_quitting", quit_case)
+def test_quit_case(pygame_event, is_quitting):
     """
     Check if clicking escape or PyGame quitting to quit the game results in
     the correct action.
@@ -115,7 +119,7 @@ def test_quit_case(pygame_event, is_running):
     pg.event.post(pygame_event)  # add the event to the queue
 
     # Check if game stops running.
-    assert test_player_controller.game.is_running == is_running
+    assert test_player_controller.game.is_quitting == is_quitting
 
 
 @pytest.mark.parametrize("pygame_event, flag_value", restart_case)
@@ -130,7 +134,7 @@ def test_player_restart_case(pygame_event, flag_value):
         flag_value: An integer indicating which Player method has been called.
     """
     # Simulate key press.
-    test_player_controller.game.message = True
+    test_player_controller.game._message = True
     pg.event.post(pygame_event)  # add the event to the queue
 
     # Check if correct method is called when lost or won message is displayed.

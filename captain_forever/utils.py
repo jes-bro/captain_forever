@@ -42,20 +42,21 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
 #     # return Sound(path)
 
 
-def wrap_position(position, surface):
+def wrap_position(position, width, height):
     """
     re-maps coordinates off of a surface's size back to real points
 
     inputs:
         position: tuple of ints, position on the surface (0, 0 is top left)
         surface: pygame surface, typically the display surface
+        width: Int, represents width of screen.
+        height: Int, represents height of screen.
     """
-    (x, y) = position
-    (w, h) = surface.get_size()
-    return Vector2(x % w, y % h)
+    (x_coordinate, y_coordinate) = position
+    return Vector2(x_coordinate % width, y_coordinate % height)
 
 
-def get_random_position(surface):
+def get_random_position(width, height):
     """
     returns a random position within a surface
 
@@ -66,8 +67,8 @@ def get_random_position(surface):
         random_position: Vector2 2 item position vector, random pos
     """
     return Vector2(
-        random.randrange(surface.get_width()),
-        random.randrange(surface.get_height()),
+        random.randrange(width),
+        random.randrange(height),
     )
 
 

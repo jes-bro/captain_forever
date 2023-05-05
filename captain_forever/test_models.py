@@ -9,10 +9,11 @@ from game import CaptainForever
 from models import Bullet, Ship, GameObject, NPCShip, StaticObject
 from utils import load_sprite
 
-test_game = CaptainForever()
-surface = test_game.screen
-
-# GameObject Test Cases
+pygame.init()
+width = 1082
+height = 720
+surface = pygame.display.set_mode((width, height))
+test_game = CaptainForever(width, height)
 test_object = GameObject(
     Vector2(0), load_sprite("ship", True, True), Vector2(0))
 
@@ -142,7 +143,7 @@ npc_move_velocity_cases = [
     ((-1, 1), (0, 0), True),
     ((-1, 0), (0, 0), True),
     # on perfect heading velocity is modified if above 300 units away or under 150
-    ((1, 1), (400, 399), True),
+    ((1, 1), (400, 399), False),
     ((.5, .5), (0, 0), False),
     # on perfect heading between 300 and 150 units away, no velocity
     ((1, 0), (200, 400), True)
@@ -192,7 +193,7 @@ def test_move_cases(velocity, distance_change):
     """
     original_position = test_object.position
     test_object.velocity = velocity
-    test_object.move(surface)
+    test_object.move(width, height)
     new_position = test_object.position
 
     assert original_position.distance_to(new_position) == distance_change
@@ -316,7 +317,7 @@ def test_npc_move_shoot_cases(heading, shots):
     test_game.npc_ship.direction = Vector2(heading)
     # forcing the shooting delay above its threshold
     test_game.npc_ship._shooting_delay = 1100
-    test_game.npc_ship.move(surface, test_game.test_ship)
+    test_game.npc_ship.move(test_game.test_ship, width, height)
     bullet_instances = len(test_game.npc_bullets) - starting_bullets
 
     # Check if health is the correct value.
@@ -340,7 +341,7 @@ def test_npc_move_rotate_cases(heading, move_flag):
                           )
     test_game.npc_ship.direction = Vector2(heading)
     # forcing the shooting delay above its threshold
-    test_game.npc_ship.move(surface, test_game.test_ship)
+    test_game.npc_ship.move(test_game.test_ship, width, height)
     # Check if health is the correct value.
     assert move_flag == test_game.npc_ship.method_flag
 
@@ -361,10 +362,10 @@ def test_npc_move_velocity_cases(heading, npc_position, velocity_change):
     test_game.npc_ship = (NPCShip(Vector2(0), "ship", test_game.npc_bullets.append)
                           )
     test_game.npc_ship.direction = Vector2(heading)
-    test_game.npc_ship.position = Vector2(npc_position)
+    test_game.npc_ship._position = Vector2(npc_position)
     test_game.npc_ship.velocity = Vector2(0)
     # forcing the shooting delay above its threshold
-    test_game.npc_ship.move(surface, test_game.test_ship)
+    test_game.npc_ship.move(test_game.test_ship, width, height)
     change_bool = test_game.npc_ship.velocity == Vector2(0)
     # Check if health is the correct value.
     assert velocity_change == change_bool

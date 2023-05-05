@@ -11,6 +11,9 @@ from utils import (
 )
 from view import print_text
 
+width = 1082
+height = 720
+
 
 class TestMyModule(unittest.TestCase):
     def setUp(self):
@@ -38,25 +41,29 @@ class TestMyModule(unittest.TestCase):
         # Test wrapping position that is off the top of the screen
         position = (-50, -50)
         surface = Surface((800, 600))
-        wrapped_position = wrap_position(position, surface)
+        width = 800
+        height = 600
+        wrapped_position = wrap_position(position, width, height)
         self.assertEqual(wrapped_position, (750, 550))
 
         # Test wrapping position that is off the right of the screen
         position = (850, 300)
         surface = Surface((800, 600))
-        wrapped_position = wrap_position(position, surface)
+        wrapped_position = wrap_position(position, width, height)
         self.assertEqual(wrapped_position, (50, 300))
 
         # Test wrapping position that is off the bottom of the screen
         position = (400, 650)
         surface = Surface((800, 600))
-        wrapped_position = wrap_position(position, surface)
+        wrapped_position = wrap_position(position, width, height)
         self.assertEqual(wrapped_position, (400, 50))
 
         # Test wrapping position that is off the left of the screen
         position = (-50, 300)
         surface = Surface((800, 600))
-        wrapped_position = wrap_position(position, surface)
+        width = 800
+        height = 600
+        wrapped_position = wrap_position(position, width, height)
         self.assertEqual(wrapped_position, (750, 300))
 
     def test_get_random_position(self):
@@ -64,9 +71,11 @@ class TestMyModule(unittest.TestCase):
         surface = MagicMock()
         surface.get_width.return_value = 800
         surface.get_height.return_value = 600
+        width = 800
+        height = 600
 
         # Test getting a random position
-        random_position = get_random_position(surface)
+        random_position = get_random_position(width, height)
         self.assertTrue(random_position.x >= 0 and random_position.x <= 800)
         self.assertTrue(random_position.y >= 0 and random_position.y <= 600)
 

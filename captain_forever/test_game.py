@@ -4,14 +4,16 @@ Test the ArrowController class to respond appropriately to key inputs.
 import pytest
 import pygame
 from game import CaptainForever
-from models import Ship, GameObject, NPCShip, StaticObject
-from utils import load_sprite
-test_game = CaptainForever()
+from models import Ship, NPCShip, StaticObject
+
+pygame.init()
+width = 1082
+height = 720
+screen = pygame.display.set_mode((width, height))
+test_game = CaptainForever(1082, 720)
 
 init_cases = [
     # Check if game class attributes are initialized to the right type.
-    (test_game.screen, pygame.Surface),
-    (test_game.font, pygame.font.Font),
     (test_game.message, str),
     (test_game.counter, int),
     (test_game.fires, list),
@@ -63,7 +65,7 @@ def test_init_cases(attribute, attribute_type):
     """
 
     # Check if attribute is of the correct type.
-    test_game.__init__()
+    test_game.__init__(1082, 720)
     assert isinstance(attribute, attribute_type)
 
 
@@ -71,7 +73,7 @@ def test_enemy_ship_spawning():
     """
     Check that correct number of enemy ships are added to game upon init.
     """
-    test_game.__init__()
+    test_game.__init__(width, height)
     assert len(test_game.npc_ships) == 3
 
 
@@ -81,9 +83,9 @@ def test_process_game_logic(game_objects, expected_result):
     bullets, npc_bullets, npc_ships = game_objects
 
     # replace game object lists with input game objects
-    test_game.bullets = bullets
-    test_game.npc_bullets = npc_bullets
-    test_game.npc_ships = npc_ships
+    test_game._bullets = bullets
+    test_game._npc_bullets = npc_bullets
+    test_game._npc_ships = npc_ships
 
     # call _process_game_logic method
     test_game._process_game_logic()
@@ -99,3 +101,4 @@ def test_process_game_logic(game_objects, expected_result):
     else:
         raise ValueError(f"Invalid expected_result: {expected_result}")
 
+# get game objects, end game message, spawn enemy
