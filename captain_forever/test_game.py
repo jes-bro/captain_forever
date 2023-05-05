@@ -104,13 +104,14 @@ def test_enemy_ship_spawning():
 def test_process_game_logic(game_objects, expected_result):
     """
     Test that process_game_logic works under various conditions.
+    
+    If there is no player object in the set, for instance,
+    message_flag is "lost".
 
     Args:
         game_objects: A list of the game objects currently in the game.
         expected_result: A string representing the game state
         corresponding to that set of game objects.
-        If there is no player object in the set, for instance,
-        the string will be "lost".
     """
     # unpack game objects
     bullets, npc_bullets, npc_ships = game_objects
