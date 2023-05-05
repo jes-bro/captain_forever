@@ -5,18 +5,12 @@ from models import Ship, NPCShip, StaticObject
 
 class CaptainForever:
     """
-    Top level game class which processes logic and calls view and control class.
+    Class which processes game logic and interfaces with the view
+    and controller classes.
 
     Attributes:
-        _fires: List, elements are StaticObject instances.
-        npc_ships: List, elements are NPCShip instances.
-        npc_bullets: List, elements are Bullet instances from NPCShip instances.
-        bullets: List, elements are Bullet instances from player_ship.
-        player_ship: Ship instance representing player that responds to input.
-        _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
-        is_running: Bool, tells you if PyGame is running or not.
-        counter: Int, counter that helps us delay when fire disappears.
-        _message_flag: String, tells you if you have won or lost the game.
+        counter: Int, counter that helps delay when fire disappears.
+        is_quitting: Bool, represents whether game is quitting or not.
     """
 
     ENEMY_SPAWN_DISTANCE = 400
@@ -28,6 +22,15 @@ class CaptainForever:
         Args:
             width: Int, represents width of screen.
             height: Int, represents height of screen.
+
+        Attributes:
+            _fires: List, elements are StaticObject instances.
+            _npc_ships: List, elements are NPCShip instances.
+            _npc_bullets: List, elements are Bullet instances from NPCShip instances.
+            _bullets: List, elements are Bullet instances from player_ship.
+            _player_ship: Ship instance representing player that responds to input.
+            _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
+            _message_flag: String, tells you if you have won or lost the game.
         """
         self._message = ""
         self._fires = []

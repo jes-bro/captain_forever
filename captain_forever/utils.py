@@ -1,3 +1,6 @@
+"""
+Utility functions that support gameplay.
+"""
 import random
 from pygame.image import load
 from pygame.transform import scale

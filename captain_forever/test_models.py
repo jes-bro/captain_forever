@@ -58,8 +58,8 @@ GameObject_move_cases = [
     (Vector2(100, 0), 100),
     (Vector2(0, 100), 100),
     # test that velocities over the width of the screen get positions wrapped around
-    (Vector2(surface.get_width() + 100, 0), 100),
-    (Vector2(0, surface.get_height() + 100), 100),
+    (Vector2(width + 100, 0), 100),
+    (Vector2(0, height + 100), 100),
 ]
 
 
@@ -192,7 +192,7 @@ def test_move_cases(velocity, distance_change):
         distance_change: expected magnitude (number of pixels) of that move.
     """
     original_position = test_object.position
-    test_object.velocity = velocity
+    test_object._velocity = velocity
     test_object.move(width, height)
     new_position = test_object.position
 
@@ -226,7 +226,7 @@ def test_ship_rotate_degrees_cases(clockwise_bool, expected_change):
         clockwise_bool: bool, tells the rotation whether it is clockwise
         expected_change: int, number of degrees the rotation is expected to be
     """
-    test_game.test_ship.direction = Vector2(0, -1)
+    test_game.test_ship._direction = Vector2(0, -1)
     test_game.test_ship.rotate(clockwise_bool)
     actual_change = math.ceil(
         Vector2(0, -1).angle_to(test_game.test_ship.direction))
@@ -246,7 +246,7 @@ def test_ship_accelerate_decellerate_cases(acceleration_value, expected_change):
         acceleration_value: int, number to multiply ACCELERATION by to accelerate. If negative, calls decellerate
         expected_change: float, expected difference in magnitude between original and new velocity vector
     """
-    test_game.test_ship.velocity = Vector2(0)
+    test_game.test_ship._velocity = Vector2(0)
     if acceleration_value < 0:
         acceleration_value = acceleration_value * -1
         test_game.test_ship.deccelerate(acceleration_value)
@@ -314,7 +314,7 @@ def test_npc_move_shoot_cases(heading, shots):
     starting_bullets = len(test_game.npc_bullets)
     test_game.npc_ship = (NPCShip(Vector2(0), "ship", test_game.npc_bullets.append)
                           )
-    test_game.npc_ship.direction = Vector2(heading)
+    test_game.npc_ship._direction = Vector2(heading)
     # forcing the shooting delay above its threshold
     test_game.npc_ship._shooting_delay = 1100
     test_game.npc_ship.move(test_game.test_ship, width, height)
@@ -339,7 +339,7 @@ def test_npc_move_rotate_cases(heading, move_flag):
     """
     test_game.npc_ship = (NPCShip(Vector2(0), "ship", test_game.npc_bullets.append)
                           )
-    test_game.npc_ship.direction = Vector2(heading)
+    test_game.npc_ship._direction = Vector2(heading)
     # forcing the shooting delay above its threshold
     test_game.npc_ship.move(test_game.test_ship, width, height)
     # Check if health is the correct value.
@@ -361,9 +361,9 @@ def test_npc_move_velocity_cases(heading, npc_position, velocity_change):
     """
     test_game.npc_ship = (NPCShip(Vector2(0), "ship", test_game.npc_bullets.append)
                           )
-    test_game.npc_ship.direction = Vector2(heading)
+    test_game.npc_ship._direction = Vector2(heading)
     test_game.npc_ship._position = Vector2(npc_position)
-    test_game.npc_ship.velocity = Vector2(0)
+    test_game.npc_ship._velocity = Vector2(0)
     # forcing the shooting delay above its threshold
     test_game.npc_ship.move(test_game.test_ship, width, height)
     change_bool = test_game.npc_ship.velocity == Vector2(0)

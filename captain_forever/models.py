@@ -13,14 +13,7 @@ UP = Vector2(0, -1)
 
 class GameObject:
     """ "
-    Game Object for storing sprites and attributes for game state and drawing
-
-    Attributes:
-        position: Vector2, x and y position on the screen
-        sprite: Pygame surface, image with some width and height
-        radius: int, radius of the sprite
-        velocity: Vector2, rate of change in x and y of the sprite
-        method_flag: Int, used to identify which function was called during testing.
+    Game Object for storing sprites and attributes for game state and drawing.
 
     Methods:
         draw: draw object on a surface at position
@@ -31,22 +24,49 @@ class GameObject:
     def __init__(self, position, sprite, velocity):
         """
         Initialize a GameObject instance.
+
+        Attributes:
+            _position: Vector2, x and y position on the screen
+            _sprite: Pygame surface, image with some width and height
+            _radius: int, radius of the sprite
+            _velocity: Vector2, rate of change in x and y of the sprite
+            _method_flag: Int, used to identify which function was called during testing.
         """
-        self.position = Vector2(position)
-        self.sprite = sprite
-        self.radius = sprite.get_width() / 2
-        self.velocity = Vector2(velocity)
-        self.method_flag = 0
+        self._position = Vector2(position)
+        self._sprite = sprite
+        self._radius = sprite.get_width() / 2
+        self._velocity = Vector2(velocity)
+        self._method_flag = 0
+
+    @property
+    def position(self):
+        return self._position
+
+    @property
+    def sprite(self):
+        return self._sprite
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @property
+    def velocity(self):
+        return self._velocity
+
+    @property
+    def method_flag(self):
+        return self._method_flag
 
     def draw(self, surface):
         """
         Draw the game object onto a surface at its current position.
 
         Args:
-            surface: pygame surface, surface on which object will be drawn
+            surface: PyGame surface on which the sprite will be drawn.
         """
-        blit_position = self.position - Vector2(self.radius)
-        surface.blit(self.sprite, blit_position)
+        blit_position = self._position - Vector2(self._radius)
+        surface.blit(self._sprite, blit_position)
 
     def move(self, width, height):
         """
@@ -57,8 +77,8 @@ class GameObject:
             width: Int, represents width of screen.
             height: Int, represents height of screen.
         """
-        self.position = wrap_position(
-            self.position + self.velocity, width, height)
+        self._position = wrap_position(
+            self._position + self._velocity, width, height)
 
     def collides_with(self, other_obj):
         """
@@ -67,19 +87,13 @@ class GameObject:
         Args:
             other_obj: class instance inherited from GameObject with radius attribute
         """
-        distance = self.position.distance_to(other_obj.position)
-        return distance < self.radius + other_obj.radius
+        distance = self._position.distance_to(other_obj._position)
+        return distance < self._radius + other_obj._radius
 
 
 class StaticObject(GameObject):
     """
-    creates an object that does not move
-
-    Attributes:
-        position: Vector2, x and y position on the screen
-        sprite: Pygame surface, image with some width and height
-        radius: int, radius of the sprite
-        velocity: Vector2, (0, 0) because these objects do not move
+    Create an object that does not move.
 
     Methods:
         draw: draw object on a surface at position
@@ -89,7 +103,18 @@ class StaticObject(GameObject):
 
     def __init__(self, position, name):
         """
-        initializes static object
+        Initializes static object. 
+
+        Args:
+            position: Vector2, x and y position on the screen
+            name: Str, name of the file which the ship png is located in.
+
+        Attributes:
+            _position: Vector2, x and y position on the screen
+            _sprite: Pygame surface, image with some width and height
+            _radius: int, radius of the sprite
+            _velocity: Vector2, rate of change in x and y of the sprite
+            _method_flag: Int, used to identify which function was called during testing.
         """
         super().__init__(
             position, load_sprite(f"{name}", True, True), Vector2(0)
@@ -104,14 +129,6 @@ class Ship(GameObject):
         MANEUVERABILITY: Int, degrees per second a ship can turn.
         ACCELERATION: Float, rate of cartesian transform velocity change.
 
-    Attributes:
-        position: Tuple of ints, position (x, y) on surface to draw the ship.
-        create_bullet_callback: Function, function to add bullets to list to be processed.
-        name: Str, name of the file which the ship png is located in.
-        direction: Vector2, x and y vector that shows orientation of sprite.
-        _health: Int, number of hits before the ship will die.
-
-
     Methods:
         rotate: Rotate the ship's direction by MANEUVERABILITY degrees.
         accelerate: Increase the ship velocity by ACCELERATION.
@@ -125,27 +142,47 @@ class Ship(GameObject):
     """
 
     MANEUVERABILITY = 3
-    ACCELERATION = 0.20  # 0.25
+    ACCELERATION = 0.20
     BULLET_SPEED = 9
-    # LASER_SOUND = load_sound("laser")
 
     def __init__(
         self, position, create_bullet_callback, name, with_alpha, with_scaling
     ):
         """
         Initialize Ship (NPC and player) and bullet callbacks.
+
+        Args:
+        name: Str, name of the file which the ship png is located in.
+        position: Vector2, x and y position on the screen
+        create_bullet_callback: Function, function to add bullets to list to be processed.
+        with_alpha:
+        with_scaling:
+
+        Attributes:
+            _direction: Vector2, x and y vector that shows orientation of sprite.
+            _health: Int, number of hits before the ship will die.
+            _create_bullet_callback: Function, function to add bullets to list to be processed.
+            _position: Vector2, x and y position on the screen
+            _sprite: Pygame surface, image with some width and height
+            _radius: int, radius of the sprite
+            _velocity: Vector2, rate of change in x and y of the sprite
+            _method_flag: Int, used to identify which function was called during testing.
         """
         # creates callback for game to access bullets
-        self.create_bullet_callback = create_bullet_callback
+        self._create_bullet_callback = create_bullet_callback
         self._health = 3
 
         # initialize unit vector upwards initial direction
-        self.direction = Vector2(UP)
+        self._direction = Vector2(UP)
         super().__init__(
             position,
             load_sprite(f"{name}", with_alpha, with_scaling),
             Vector2(0),
         )
+
+    @property
+    def direction(self):
+        return self._direction
 
     def rotate(self, clockwise=True):
         """
@@ -154,10 +191,10 @@ class Ship(GameObject):
         Args:
             clockwise: Bool, whether the rotation is in clockwise direction.
         """
-        self.method_flag = 4
+        self._method_flag = 4
         sign = 1 if clockwise else -1
         angle = self.MANEUVERABILITY * sign
-        self.direction.rotate_ip(angle)
+        self._direction.rotate_ip(angle)
 
     def accelerate(self, acceleration_factor):
         """
@@ -166,9 +203,9 @@ class Ship(GameObject):
         Args:
             acceleration_factor: Float, amount the velocity is increased by.
         """
-        self.method_flag = 5
-        self.velocity += acceleration_factor * (
-            self.direction * self.ACCELERATION
+        self._method_flag = 5
+        self._velocity += acceleration_factor * (
+            self._direction * self.ACCELERATION
         )
 
     def deccelerate(self, deceleration_factor):
@@ -178,19 +215,19 @@ class Ship(GameObject):
         Args:
             deceleration_factor: Float, amount the velocity is decreased by.
         """
-        self.method_flag = 6
-        self.velocity -= deceleration_factor * (
-            self.direction * self.ACCELERATION
+        self._method_flag = 6
+        self._velocity -= deceleration_factor * (
+            self._direction * self.ACCELERATION
         )
 
     def shoot(self):
         """
         Creates a bullet instance shooting in the direction of the ship from its position.
         """
-        self.method_flag = 1
-        bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
-        bullet = Bullet(self.position, bullet_velocity)
-        self.create_bullet_callback(bullet)
+        self._method_flag = 1
+        bullet_velocity = self._direction * self.BULLET_SPEED + self._velocity
+        bullet = Bullet(self._position, bullet_velocity)
+        self._create_bullet_callback(bullet)
 
     def draw(self, surface):
         """
@@ -199,10 +236,10 @@ class Ship(GameObject):
         Args:
             surface: PyGame surface, surface on which object will be drawn.
         """
-        angle_to_transform = self.direction.angle_to(UP)
-        rotated_surface = rotozoom(self.sprite, angle_to_transform, 1.0)
+        angle_to_transform = self._direction.angle_to(UP)
+        rotated_surface = rotozoom(self._sprite, angle_to_transform, 1.0)
         rotated_surface_size = Vector2(rotated_surface.get_size())
-        blit_position = self.position - rotated_surface_size * 0.5
+        blit_position = self._position - rotated_surface_size * 0.5
         surface.blit(rotated_surface, blit_position)
 
     def reduce_health(self):
@@ -221,11 +258,34 @@ class Ship(GameObject):
 class NPCShip(Ship):
     """
     Ship controlled by the computer.
+
+    Methods:
+        move:
+        shoot:
     """
 
     BULLET_DELAY = 1
 
     def __init__(self, position, name, create_bullet_callback):
+        """
+        Initialize NPC ship.
+
+        Attributes:
+            _shooting_delay: Int, represents amt of time to wait before shotting
+            player.
+            _direction: Vector2, x and y vector that shows orientation of sprite.
+            _health: Int, number of hits before the ship will die.
+            _create_bullet_callback: Function, function to add bullets to list to be processed.
+            _position: Vector2, x and y position on the screen
+            _sprite: Pygame surface, image with some width and height
+            _radius: int, radius of the sprite
+            _velocity: Vector2, rate of change in x and y of the sprite
+            _method_flag: Int, used to identify which function was called during testing.
+        Args:
+            position:
+            name:
+            create_bullet_callback: 
+        """
         self._position = position
         super().__init__(
             self._position, create_bullet_callback, name, True, True
@@ -235,10 +295,10 @@ class NPCShip(Ship):
 
         # creating new surface to recolor sprite
         recolor_surface = pygame.Surface(
-            self.sprite.get_size(), pygame.SRCALPHA
+            self._sprite.get_size(), pygame.SRCALPHA
         )
         recolor_surface.fill(pygame.color.Color("green"))
-        self.sprite.blit(
+        self._sprite.blit(
             recolor_surface, (0, 0), special_flags=pygame.BLEND_ADD
         )
 
@@ -251,26 +311,26 @@ class NPCShip(Ship):
             player: Ship instance, player ship with position attribute
         """
         # Find direction vector (dx, dy) between enemy and player.
-        player_position = player.position
+        player_position = player._position
         dirvect = pygame.math.Vector2(
-            player_position[0] - self.position[0],
-            player_position[1] - self.position[1],
+            player_position[0] - self._position[0],
+            player_position[1] - self._position[1],
         )
-        error_angle = self.direction.angle_to(dirvect)
+        error_angle = self._direction.angle_to(dirvect)
         if error_angle > 3 or error_angle < -3:
             self.rotate(clockwise=(error_angle > 0))
         else:
-            self.velocity = Vector2(0)
+            self._velocity = Vector2(0)
             self.shoot()
-            self.method_flag = 8
+            self._method_flag = 8
             if dirvect.magnitude() > 300:
-                self.velocity = dirvect.normalize() * 2
+                self._velocity = dirvect.normalize() * 2
             if dirvect.magnitude() < 150:
-                self.velocity = dirvect.normalize() * -2
+                self._velocity = dirvect.normalize() * -2
 
         # Move along this normalized vector towards the player at current speed.
-        self.position = wrap_position(
-            self.position + self.velocity, width, height)
+        self._position = wrap_position(
+            self._position + self._velocity, width, height)
 
     def shoot(self):
         """
@@ -279,12 +339,23 @@ class NPCShip(Ship):
         self._shooting_delay += 9
         if self._shooting_delay > 1000 * self.BULLET_DELAY:
             self._shooting_delay = 0
-            bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
-            bullet = Bullet(self.position, bullet_velocity)
-            self.create_bullet_callback(bullet)
+            bullet_velocity = self._direction * self.BULLET_SPEED + self._velocity
+            bullet = Bullet(self._position, bullet_velocity)
+            self._create_bullet_callback(bullet)
 
 
 class Bullet(GameObject):
+    """
+    Define bullet object.
+
+    Attributes:
+        _position: Vector2, x and y position on the screen
+        _sprite: Pygame surface, image with some width and height
+        _radius: int, radius of the sprite
+        _velocity: Vector2, rate of change in x and y of the sprite
+        _method_flag: Int, used to identify which function was called during testing.
+    """
+
     def __init__(self, position, velocity):
         """
         Initialize bullet from a given sprite.
@@ -297,6 +368,6 @@ class Bullet(GameObject):
 
     def move(self):
         """
-        override GameObject.move() so bullets do not wrap the screen upon exit.
+        Override GameObject.move() so bullets do not wrap the screen upon exit.
         """
-        self.position = self.position + self.velocity
+        self._position = self._position + self._velocity
