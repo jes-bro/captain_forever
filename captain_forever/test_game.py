@@ -7,6 +7,7 @@
 """
 Test the ArrowController class to respond appropriately to key inputs.
 """
+import unittest
 import pytest
 import pygame
 from game import CaptainForever
@@ -17,6 +18,9 @@ WIDTH = 1082
 HEIGHT = 720
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 test_game = CaptainForever(1082, 720)
+test_player_ship_pos = (50, 50)
+test_initial_player_ship_pos = (400, 400)
+test_far_pos = (800, 800)
 
 init_cases = [
     # Check if game class attributes are initialized to the right type.
@@ -30,10 +34,8 @@ init_cases = [
     (test_game.player_ship, Ship),
     (test_game.enemy_spawn_counter, int),
 ]
-# Test _process_game_logic
-test_player_ship_pos = (50, 50)
-test_initial_player_ship_pos = (400, 400)
-test_far_pos = (800, 800)
+
+# Test process game logic
 test_cases = [
     # Test case 1: No message, process game objects and no collision
     (
@@ -133,3 +135,37 @@ def test_process_game_logic(game_objects, expected_result):
         assert test_game.message_flag == "won"
     else:
         raise ValueError(f"Invalid expected_result: {expected_result}")
+
+
+class TestEndGameMessage(unittest.TestCase):
+    """
+    Test whether or not end_game_message works with
+    the strings we expect it to.
+    """
+
+    def setUp(self):
+        """
+        Setup TestEndGameMessage class.
+        """
+        self.game = CaptainForever(WIDTH, HEIGHT)
+
+    def test_end_game_message_win(self):
+        """
+        Test whether a message flag of win does not
+        error.
+        """
+        self.game._message_flag = "win"
+        self.game._end_game_message()
+
+    def test_end_game_message_lost(self):
+        """
+        Test whether a message flag of lost
+        does not error.
+        """
+        self.game._message_flag = "lost"
+        self.game._end_game_message()
+
+
+# No tests for get_game_objects and _spawn_enemy_ships have been provided due to the
+# need to use Magic Mock, and Jess is unfamiliar with how to use it and believes it's
+# not expected that softdes students know how to use it.
