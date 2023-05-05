@@ -1,5 +1,4 @@
 # Welcome to Captain Forever! 
-An Invigorating and Nostalgic Experience
 
 ## The goal
 Captain Forever is an exhilarating spaceship adventure game that transports you, the captain, into the role of an interstellar pilot being pursued by a fleet of formidable enemy ships. In the midst of a cosmic field, you’ll navigate a single ship through formations of enemies that periodically cross your path. If you stay still too long, the enemies will lock on to your position and overwhelm you with their canons! You must return fire all while avoiding collisions and dodging counter-fire to survive. If you get hit by the enemies three times you will explode, but if you can destroy the pursuing fleet before reinforcements arrive you win!
