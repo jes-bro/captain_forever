@@ -23,7 +23,7 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     """
     Load a sprite onto the PyGame surface.
 
-    Args:   
+    Args:
         name: String, representing name of png to load.
         with_alpha: Bool, whether to make image transparent.
         with_scaling: Bool, represents whether image should be scald.
