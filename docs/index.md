@@ -27,7 +27,7 @@ Here is the [README]( https://github.com/olincollege/captain_forever/blob/main/R
 
 
 ## About the Authors
-We are Jess, Rajiv and Muya! What inspired us to create this game was to rekindle the nostalgia of classic arcade gaming, for it captivate gamers with its simple yet addictive gameplay and distinctive vector graphics. We hope you enjoy playing it as much as we enjoyed creating it!
+We are Jess, Rajiv and Muya! What inspired us to create this game was to rekindle the nostalgia of classic arcade gaming, for it captivates gamers with its simple yet addictive gameplay and distinctive vector graphics. We hope you enjoy playing it as much as we enjoyed creating it!
 
 ## Attributions 
 
