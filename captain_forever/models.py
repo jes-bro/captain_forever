@@ -1,19 +1,25 @@
 # pylint: disable=no-member
+# pylint: disable=no-name-in-module
+# Disabling pylint warnings related to PyGame that aren't valid
+"""
+Define the classes corresponding to our model architecture and update
+their properties to reflect game state.
+"""
 import pygame
 from pygame.math import Vector2
 from pygame.transform import rotozoom
+from pygame.locals import *
 from utils import (
     load_sprite,
     wrap_position,
 )
-from pygame.locals import *
 
 # Because pygame has inverted y axis, this vector points UP (used for calculations)
 UP = Vector2(0, -1)
 
 
 class GameObject:
-    """ "
+    """
     Game Object for storing sprites and attributes for game state and drawing.
 
     Methods:
@@ -41,22 +47,54 @@ class GameObject:
 
     @property
     def position(self):
+        """
+        Return _position.
+
+        Returns:
+            _position: Vector2, representing x,y object pos on screen.
+        """
         return self._position
 
     @property
     def sprite(self):
+        """
+        Return _sprite.
+
+        Returns:
+            _sprite: PyGame Sprite representing model object.
+        """
         return self._sprite
 
     @property
     def radius(self):
+        """
+        Return _radius.
+
+        Returns:
+            _radius: Int, representing radius of sprite.
+        """
         return self._radius
 
     @property
     def velocity(self):
+        """
+        Return _velocity.
+
+        Returns:
+            _velocity: Vector2, representing magnitude and
+            direction of velocity of object.
+        """
         return self._velocity
 
     @property
     def method_flag(self):
+        """
+        Return _method_flag.
+
+        Returns:
+            _method_flag: Int, helps determine whether function
+            has been called for unit testing.
+        """
         return self._method_flag
 
     def draw(self, surface):
@@ -79,7 +117,8 @@ class GameObject:
             height: Int, represents height of screen.
         """
         self._position = wrap_position(
-            self._position + self._velocity, width, height)
+            self._position + self._velocity, width, height
+        )
 
     def collides_with(self, other_obj):
         """
@@ -88,8 +127,8 @@ class GameObject:
         Args:
             other_obj: class instance inherited from GameObject with radius attribute
         """
-        distance = self._position.distance_to(other_obj._position)
-        return distance < self._radius + other_obj._radius
+        distance = self._position.distance_to(other_obj.position)
+        return distance < self._radius + other_obj.radius
 
 
 class StaticObject(GameObject):
@@ -104,7 +143,7 @@ class StaticObject(GameObject):
 
     def __init__(self, position, name):
         """
-        Initializes static object. 
+        Initializes static object.
 
         Args:
             position: Vector2, x and y position on the screen
@@ -183,6 +222,12 @@ class Ship(GameObject):
 
     @property
     def direction(self):
+        """
+        Return _direction.
+
+        Returns:
+            _direction: Vector2, representing direction of object.
+        """
         return self._direction
 
     def rotate(self, clockwise=True):
@@ -285,7 +330,7 @@ class NPCShip(Ship):
         Args:
             position:
             name:
-            create_bullet_callback: 
+            create_bullet_callback:
         """
         self._position = position
         super().__init__(
@@ -312,14 +357,14 @@ class NPCShip(Ship):
             player: Ship instance, player ship with position attribute
         """
         # Find direction vector (dx, dy) between enemy and player.
-        player_position = player._position
+        player_position = player.position
         dirvect = pygame.math.Vector2(
             player_position[0] - self._position[0],
             player_position[1] - self._position[1],
         )
         error_angle = self._direction.angle_to(dirvect)
         if error_angle > 3 or error_angle < -3:
-            self.rotate(clockwise=(error_angle > 0))
+            self.rotate(clockwise=error_angle > 0)
         else:
             self._velocity = Vector2(0)
             self.shoot()
@@ -331,7 +376,8 @@ class NPCShip(Ship):
 
         # Move along this normalized vector towards the player at current speed.
         self._position = wrap_position(
-            self._position + self._velocity, width, height)
+            self._position + self._velocity, width, height
+        )
 
     def shoot(self):
         """
@@ -340,7 +386,9 @@ class NPCShip(Ship):
         self._shooting_delay += 9
         if self._shooting_delay > 1000 * self.BULLET_DELAY:
             self._shooting_delay = 0
-            bullet_velocity = self._direction * self.BULLET_SPEED + self._velocity
+            bullet_velocity = (
+                self._direction * self.BULLET_SPEED + self._velocity
+            )
             bullet = Bullet(self._position, bullet_velocity)
             self._create_bullet_callback(bullet)
 

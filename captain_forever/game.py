@@ -1,5 +1,10 @@
 # pylint: disable=no-member
-from utils import load_sprite, get_random_position
+# pylint: disable=no-name-in-module
+# Disabling pylint warnings related to PyGame that aren't valid
+"""
+Game class that processes the game logic in our model.
+"""
+from utils import get_random_position
 from models import Ship, NPCShip, StaticObject
 
 
@@ -31,7 +36,6 @@ class CaptainForever:
             _player_ship: Ship instance representing player that responds to input.
             _enemy_spawn_counter: Int, iterated counter to keep track of spawning.
             _message_flag: String, tells you if you have won or lost the game.
-            _message_displayed: Bool, reps whether message has been displayed or not.
             _message: A string representing the message to be displayed at end.
         """
         self._message = ""
@@ -47,8 +51,6 @@ class CaptainForever:
         self._height = height
         self._enemy_spawn_counter = 0
         self._message_flag = ""
-        self._message_displayed = False
-        self.is_quitting = False
         for _ in range(3):
             while True:
                 position = get_random_position(width, height)
@@ -67,7 +69,7 @@ class CaptainForever:
         """
         Return _message.
 
-        Returns: 
+        Returns:
             _message: A string representing the message to be displayed at end.
         """
         return self._message
@@ -84,41 +86,97 @@ class CaptainForever:
 
     @property
     def bullets(self):
+        """
+        Return _bullets.
+
+        Returns:
+            _bullets: List, elements are bullet instances.
+        """
         return self._bullets
 
     @property
     def npc_bullets(self):
+        """
+        Return _npc_bullets.
+
+        Returns:
+            _npc_bullets: List, elements are bullet instances.
+        """
         return self._npc_bullets
 
     @property
     def npc_ships(self):
+        """
+        Return _npc_ships.
+
+        Returns:
+            _npc_ships: List, elements are NPCShip instances.
+        """
         return self._npc_ships
 
     @property
     def enemy_spawn_counter(self):
+        """
+        Return _enemy_spawn_counter.
+
+        Returns:
+            _enemy_spawn_counter: Int, represents a value that
+            helps determine when to spawn more enemies in.
+        """
         return self._enemy_spawn_counter
 
     @property
     def message_flag(self):
+        """
+        Return _message_flag.
+
+        Returns:
+            _message_flag: Bool, helps determine whether function
+            was called in a unit test or not.
+        """
         return self._message_flag
 
     @property
     def is_running(self):
+        """
+        Return _is_running.
+
+        Returns:
+            _is_running: Bool, helps us determine whether game is
+            running or not.
+        """
         return isinstance(self.player_ship, Ship)
 
     @property
     def width(self):
+        """
+        Return _width.
+
+        Returns:
+            _width: Int, width of screen.
+        """
         return self._width
 
     @property
     def height(self):
+        """
+        Return _height.
+
+        Returns:
+            _height: Int, height of screen.
+        """
         return self.height
 
-    @property
-    def message_displayed(self):
-        return self._message_displayed
-
     def main_loop(self, controller, view):
+        """
+        Run main loop that updates PyGame screen frames
+        to keep game running, updating the screen based
+        on user input and the changes in our model state.
+
+        Args:
+            controller: An instance of ArrowController.
+            view: An instance of PyGame view.
+        """
         while True:
             controller.maneuver_player_ship()
             self._process_game_logic()
@@ -151,8 +209,9 @@ class CaptainForever:
                 if (
                     game_object in self._npc_ships
                 ):  # or game_object in self._fires:
-                    game_object.move(self.player_ship,
-                                     self._width, self._height)
+                    game_object.move(
+                        self.player_ship, self._width, self._height
+                    )
                 elif (
                     game_object in self._bullets
                     or game_object in self._npc_bullets
@@ -166,7 +225,6 @@ class CaptainForever:
                         self.player_ship.position, "fire"
                     )
                     self._message_flag = "lost"
-                    self._message_displayed = True
                     self._end_game_message()
                     # What would be nice is if it paused for a sec and returned to a start menu
                     break
@@ -179,15 +237,21 @@ class CaptainForever:
 
         # Check for bullet not hitting anything
         for bullet in self._bullets[:]:
-            if (bullet.position.x > self._width or
-                bullet.position.y > self._height or
-                    bullet.position.x < 0 or bullet.position.y < 0):
+            if (
+                bullet.position.x > self._width
+                or bullet.position.y > self._height
+                or bullet.position.x < 0
+                or bullet.position.y < 0
+            ):
                 self._bullets.remove(bullet)
 
         for bullet in self._npc_bullets[:]:
-            if (bullet.position.x > self._width or
-                bullet.position.y > self._height or
-                    bullet.position.x < 0 or bullet.position.y < 0):
+            if (
+                bullet.position.x > self._width
+                or bullet.position.y > self._height
+                or bullet.position.x < 0
+                or bullet.position.y < 0
+            ):
                 self._npc_bullets.remove(bullet)
 
         # Check for bullet collisions with npc ships
@@ -208,12 +272,10 @@ class CaptainForever:
                         self.player_ship.position, "fire"
                     )
                     self._message_flag = "lost"
-                    self._message_displayed = True
                     self._end_game_message()
 
         if not self._npc_ships and self.player_ship:
             self._message_flag = "won"
-            self._message_displayed = True
             self._end_game_message()
 
     def _end_game_message(self):
@@ -225,8 +287,8 @@ class CaptainForever:
                 Other strings error.
         """
         self._message = (
-            f"You {self._message_flag}! \n To exit, press escape \n To start a new"
-            " game, press enter"
+            f"You {self._message_flag}! \n To exit, press escape \n To start a"
+            " new game, press enter"
         )
 
     def _spawn_enemy(self):

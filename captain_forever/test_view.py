@@ -1,28 +1,21 @@
 # pylint: disable=no-member
-"""Module for testing the print_text function in the view module."""
-
-import pytest
+# pylint: disable=no-name-in-module
+# pylint: disable=protected-access
+# Disabling pylint warnings related to PyGame that aren't valid
+# Disabling protected access because we need to modify private vars to test
+# certain conditions
+"""
+Test the print_text function in the view class using pytest.
+"""
 import pygame
 import view
 
 
-@pytest.fixture(name="pygame_fixture")
-def pygame_init_fixture():
-    """Initialize and cleanup the Pygame library."""
-    pygame.init()
-    yield
-    pygame.quit()
-
-
-def test_print_text(pygame_fixture):
+def test_print_text():
     """
     Test the print_text function with real Pygame Surface and Font objects
     and checks if the message has been rendered on the surface by looking for
     the presence of the expected color in the surface's pixels.
-
-    Args:
-        pygame_fixture: A pytest fixture that initializes and cleans up the
-        Pygame library.
     """
     # Create a real Pygame Surface object
     surface = pygame.Surface((800, 600))

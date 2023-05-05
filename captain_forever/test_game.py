@@ -1,4 +1,9 @@
 # pylint: disable=no-member
+# pylint: disable=no-name-in-module
+# pylint: disable=protected-access
+# Disabling pylint warnings related to PyGame that aren't valid
+# Disabling protected access because we need to modify private vars to test
+# certain conditions
 """
 Test the ArrowController class to respond appropriately to key inputs.
 """
@@ -8,9 +13,9 @@ from game import CaptainForever
 from models import Ship, NPCShip, StaticObject
 
 pygame.init()
-width = 1082
-height = 720
-screen = pygame.display.set_mode((width, height))
+WIDTH = 1082
+HEIGHT = 720
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 test_game = CaptainForever(1082, 720)
 
 init_cases = [
@@ -31,29 +36,46 @@ test_initial_player_ship_pos = (400, 400)
 test_far_pos = (800, 800)
 test_cases = [
     # Test case 1: No message, process game objects and no collision
-    ([
-        # List of game objects
-        # bullets, npc_bullets, npc_ships
-        [], [], [NPCShip(test_far_pos, "ship", test_game.bullets.append)],
-    ], "continue"),  # expected result
-
+    (
+        [
+            # List of game objects
+            # bullets, npc_bullets, npc_ships
+            [],
+            [],
+            [NPCShip(test_far_pos, "ship", test_game.bullets.append)],
+        ],
+        "continue",
+    ),  # expected result
     # Test case 2: Player collides with npc_ship
-    ([
-        # bullets, npc_bullets, npc_ships
-        [], [], [NPCShip(test_initial_player_ship_pos,
-                         "ship", test_game.bullets.append)],
-    ], "lost"),  # expected result
-
+    (
+        [
+            # bullets, npc_bullets, npc_ships
+            [],
+            [],
+            [
+                NPCShip(
+                    test_initial_player_ship_pos,
+                    "ship",
+                    test_game.bullets.append,
+                )
+            ],
+        ],
+        "lost",
+    ),  # expected result
     # Test case 3: No npc ships left and player ship still alive
-    ([
-        [], [], [],  # bullets, npc_bullets, npc_ships
-    ], "won"),  # expected result
-
+    (
+        [
+            [],
+            [],
+            [],  # bullets, npc_bullets, npc_ships
+        ],
+        "won",
+    ),  # expected result
     # ... additional test cases ...
 ]
 
 
-@ pytest.mark.parametrize("attribute, attribute_type", init_cases)
+@pytest.mark.parametrize("attribute, attribute_type", init_cases)
 def test_init_cases(attribute, attribute_type):
     """
     Check if the key press to move results in the correct action.
@@ -74,12 +96,22 @@ def test_enemy_ship_spawning():
     """
     Check that correct number of enemy ships are added to game upon init.
     """
-    test_game.__init__(width, height)
+    test_game.__init__(WIDTH, HEIGHT)
     assert len(test_game.npc_ships) == 3
 
 
 @pytest.mark.parametrize("game_objects, expected_result", test_cases)
 def test_process_game_logic(game_objects, expected_result):
+    """
+    Test that process_game_logic works under various conditions.
+
+    Args:
+        game_objects: A list of the game objects currently in the game.
+        expected_result: A string representing the game state
+        corresponding to that set of game objects.
+        If there is no player object in the set, for instance,
+        the string will be "lost".
+    """
     # unpack game objects
     bullets, npc_bullets, npc_ships = game_objects
 
@@ -101,5 +133,6 @@ def test_process_game_logic(game_objects, expected_result):
         assert test_game.message_flag == "won"
     else:
         raise ValueError(f"Invalid expected_result: {expected_result}")
+
 
 # get game objects, end game message, spawn enemy

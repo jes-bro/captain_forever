@@ -1,9 +1,11 @@
 # pylint: disable=no-member
+# pylint: disable=no-name-in-module
+# Disabling pylint warnings related to PyGame that aren't valid
 """
 Tic-tac-toe game view.
 """
-import pygame
 from abc import ABC, abstractmethod
+import pygame
 from pygame.math import Vector2
 from pygame import Color
 from utils import load_sprite
@@ -51,7 +53,7 @@ class PyGameView(CaptainForeverView):
 
     def __init__(self, game, screen):
         """
-        Initialize the PyGame Display. 
+        Initialize the PyGame Display.
 
         Attributes:
             _clock: PyGame clock instance, tracks game time.
@@ -86,6 +88,19 @@ class PyGameView(CaptainForeverView):
 
 
 def print_text(surface, text, font, color=Color("tomato")):
+    """
+    Blit text to the screen so that users know how
+    to proceed in the game.
+
+    Args:
+        surface: An instance of a PyGame surface.
+        text: A string representing the text to be
+        displayed.
+        font: PyGame font object, used to determine
+        the font of the message.
+        color: A PyGame color object, used to determine
+        the color of the message.
+    """
     if "\n" in text:
         lines = text.split("\n")
         line_surfaces = []

@@ -1,4 +1,6 @@
 # pylint: disable=no-member
+# pylint: disable=no-name-in-module
+# Disabling pylint warnings related to PyGame that aren't valid
 """
 Utility functions that support gameplay.
 """
@@ -28,14 +30,13 @@ def load_sprite(name, with_alpha=True, with_scaling=False):
     """
     # os.chdir("C:/Users/jbrown/Desktop/captain_forever/Captain_Forever_Project")
     loaded_sprite = load(f"../assets/sprites/{name}.png")
-    if name in dimensions and with_scaling == True:
+    if name in dimensions and with_scaling is True:
         loaded_sprite = scale(
             loaded_sprite, (dimensions[name][0], dimensions[name][1])
         )
     if with_alpha:
         return loaded_sprite.convert_alpha()
-    else:
-        return loaded_sprite.convert()
+    return loaded_sprite.convert()
 
 
 # def load_sound(name):
